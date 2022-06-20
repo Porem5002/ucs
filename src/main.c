@@ -59,6 +59,8 @@ int main(int argc, char** argv)
 
     game.screen_rect = (SDL_Rect){ 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
     game.is_playing = true;
+    game.input.mouseX = 0;
+    game.input.mouseY = 0;
     
     game_set_mode_menu(NULL);
 
@@ -71,18 +73,16 @@ int main(int argc, char** argv)
         current_time = SDL_GetTicks();
         game.delta_time = (float) (current_time - previous_time) / 1000;
 
+        game.input.type = GAME_INPUT_NONE;
+
         while (SDL_PollEvent(&event))
         {
             switch(event.type)
             {
                 case SDL_MOUSEMOTION:
-                    game_mouse_motion();
-                    break;
                 case SDL_MOUSEBUTTONDOWN:
-                    game_mouse_button_down(event.button.button, event.button.x, event.button.y);
-                    break;
                 case SDL_KEYDOWN:
-                    game_key_down(event.key.keysym.sym);
+                    game_catch_input(&event);
                     break;
                 case SDL_QUIT: 
                     game_quit(NULL);
@@ -92,7 +92,7 @@ int main(int argc, char** argv)
             }
         }
 
-        game_update();
+        game.update();
             
         SDL_SetRenderDrawColor(game.renderer, BACKGROUND_COLOR_VALS, 255);
         SDL_RenderClear(game.renderer);

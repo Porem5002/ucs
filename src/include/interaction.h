@@ -19,4 +19,6 @@ void update_team_displayer();
 
 void challenge_auto_play();
 
+void place_piece_on_hovered_cell();
+
 #endif

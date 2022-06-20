@@ -13,7 +13,6 @@ static void move_selected_piece_in_challenge_scenario(incomplete_move_info_t inc
 static void switch_teams();
 static bool is_crowning_cell_of_team(team_t team, cell_id_t cell);
 static void promote_to_queen_if_valid(cell_id_t piece_cell);
-static void place_piece_on_hovered_cell();
 
 void challenge_auto_play()
 {
@@ -68,7 +67,7 @@ void on_screen_clicked(Uint8 button_clicked, Sint32 pixelX, Sint32 pixelY)
     }
 }
 
-static void place_piece_on_hovered_cell()
+void place_piece_on_hovered_cell()
 {
     if(game.is_cell_hovered) 
         game.scenario_data.board.playable_cells[game.currently_hovered_cell_id] = game.piece_type_to_place;
@@ -109,25 +108,15 @@ void move_selected_piece_to_hovered_cell()
 
 void update_currently_hovered_cell()
 {
-    int windowX; 
-    int windowY;
-
-    float pixelX;
-    float pixelY;
-
-    SDL_GetMouseState(&windowX, &windowY);
-
-    SDL_RenderWindowToLogical(game.renderer, windowX, windowY, &pixelX, &pixelY);
-
-    if(pixelX < game.screen_scenario_board_rect.x || pixelX > game.screen_scenario_board_rect.x + BOARD_SECTION_WIDTH)
+    if(game.input.mouseX < game.screen_scenario_board_rect.x || game.input.mouseX > game.screen_scenario_board_rect.x + BOARD_SECTION_WIDTH)
     {
         game.is_cell_hovered = false;
         return;
     }
 
     board_position_t cell_position;
-    cell_position.x = game.scenario_data.board_side_size * ((int)pixelX - game.screen_scenario_board_rect.x) / BOARD_SECTION_WIDTH;
-    cell_position.y = game.scenario_data.board_side_size * (int)pixelY / BOARD_SECTION_HEIGHT;
+    cell_position.x = game.scenario_data.board_side_size * ((int)game.input.mouseX - game.screen_scenario_board_rect.x) / BOARD_SECTION_WIDTH;
+    cell_position.y = game.scenario_data.board_side_size * (int)game.input.mouseY / BOARD_SECTION_HEIGHT;
 
     game.currently_hovered_cell_id = cell_position_to_cell_id(cell_position);
     game.is_cell_hovered = true;

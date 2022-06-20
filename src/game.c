@@ -14,35 +14,94 @@
 
 game_t game = {0};
 
-void game_update()
+void game_update_menu()
 {
-    if(game.mode == MODE_SCENARIO && game.scenario_data.scenario_mode == SCENARIO_MODE_CHALLENGE && game.scenario_data.team != game.current_team)
-        challenge_auto_play();
+    if(game.input.type == GAME_INPUT_MOUSE_BUTTON_DOWN && game.input.mouse_button_pressed == SDL_BUTTON_LEFT)
+        sui_check_buttons(game.input.mouseX, game.input.mouseY);
 }
 
-void game_mouse_motion()
+void game_update_file_browser()
 {
-    if(game.mode == MODE_SCENARIO || game.mode == MODE_EDITOR)
+    if(game.input.type == GAME_INPUT_MOUSE_BUTTON_DOWN && game.input.mouse_button_pressed == SDL_BUTTON_LEFT)
+        sui_check_buttons(game.input.mouseX, game.input.mouseY);
+}
+
+void game_update_scenario()
+{
+    if(game.input.type == GAME_INPUT_KEY_DOWN && game.input.key_pressed == SDLK_ESCAPE)
     {
-        update_currently_hovered_cell();
+        game_set_mode_menu(NULL);
+        return;
+    }
+
+    update_currently_hovered_cell();
+
+    if(game.scenario_data.scenario_mode == SCENARIO_MODE_CHALLENGE && game.scenario_data.team != game.current_team)
+    {
+        challenge_auto_play();
+        return;
+    }
+
+    if(game.input.type == GAME_INPUT_MOUSE_BUTTON_DOWN && game.input.mouse_button_pressed == SDL_BUTTON_LEFT)
+    {
+        sui_check_buttons(game.input.mouseX, game.input.mouseY);
+        select_hovered_piece();
+        return;
+    }
+
+    if(game.input.type == GAME_INPUT_MOUSE_BUTTON_DOWN && game.input.mouse_button_pressed == SDL_BUTTON_RIGHT)
+    {
+        move_selected_piece_to_hovered_cell();
+        return;
     }
 }
 
-void game_mouse_button_down(Uint8 mouse_button, Sint32 mouse_x, Sint32 mouse_y)
+void game_update_editor()
 {
-    if(game.mode == MODE_SCENARIO && game.scenario_data.scenario_mode == SCENARIO_MODE_CHALLENGE && game.scenario_data.team != game.current_team)
+    if(game.input.type == GAME_INPUT_KEY_DOWN && game.input.key_pressed == SDLK_ESCAPE)
+    {
+        game_set_mode_menu(NULL);
         return;
+    }
 
-    on_screen_clicked(mouse_button, mouse_x, mouse_y);
+    update_currently_hovered_cell();
+
+    if(game.input.type == GAME_INPUT_MOUSE_BUTTON_DOWN && game.input.mouse_button_pressed == SDL_BUTTON_LEFT)
+    {
+        sui_check_buttons(game.input.mouseX, game.input.mouseY);
+        place_piece_on_hovered_cell();
+    }
 }
 
-void game_key_down(SDL_Keycode key)
+void game_catch_input(const SDL_Event* event)
 {
-    if(game.mode == MODE_SCENARIO && game.mode == MODE_EDITOR) return;
+    if(event->type == SDL_MOUSEMOTION)
+    {
+        //if(game.input.type == GAME_INPUT_MOUSE_BUTTON_DOWN) return;
 
-    if(key == SDLK_ESCAPE) game_set_mode_menu(NULL);
+        int windowX;
+        int windowY;
+        float pixelX;
+        float pixelY;
 
-    if(game.mode == MODE_EDITOR && key == SDLK_SPACE) save_scenario_as_sch_file(&game.scenario_data);
+        SDL_GetMouseState(&windowX, &windowY);
+        SDL_RenderWindowToLogical(game.renderer, windowX, windowY, &pixelX, &pixelY);
+
+        game.input.mouseX = pixelX;
+        game.input.mouseY = pixelY;
+    }
+    else if(event->type ==  SDL_MOUSEBUTTONDOWN)
+    {
+        game.input.type = GAME_INPUT_MOUSE_BUTTON_DOWN;
+        game.input.mouseY = event->button.x;
+        game.input.mouseY = event->button.y;
+        game.input.mouse_button_pressed = event->button.button;
+    }
+    else if(event->type ==  SDL_KEYDOWN)
+    {
+        game.input.type = GAME_INPUT_KEY_DOWN;
+        game.input.key_pressed = event->key.keysym.sym;
+    }
 }
 
 void game_set_mode_menu(void* event_data)
@@ -50,7 +109,10 @@ void game_set_mode_menu(void* event_data)
     LOGGER_LOGS("Started loading Menu!");
 
     game_free_dependencies();
+    
     game.mode = MODE_MENU;
+    game.update = game_update_menu;
+    
     sui_clear_elements();
 
     TTF_Font* main_font = assetman_get_asset(MAIN_FONT_ID);
@@ -103,6 +165,8 @@ void game_set_mode_scenario(void* scenario_file_name)
     load_scenario_from_file(&game.scenario_data, safely_stored_scenario_file_name);
 
     game.mode = MODE_SCENARIO;
+    game.update = game_update_scenario;
+
     game.scenario_game_over_reached = false;
     game.force_capture_move = false;
     game.is_piece_selected = false;

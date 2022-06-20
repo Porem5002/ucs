@@ -20,6 +20,7 @@ void game_set_mode_file_browser(void* event_data)
 
     game_free_dependencies();
     game.mode = MODE_FILE_BROWSER;
+    game.update = game_update_file_browser;
     sui_clear_elements();
 
     TTF_Font* main_font = assetman_get_asset(MAIN_FONT_ID);

@@ -60,6 +60,7 @@ void game_set_mode_editor(void* event_data)
     game.piece_type_to_place = NO_PIECE;
 
     game.mode = MODE_EDITOR;
+    game.update = game_update_editor;
 
     scenario_set_default(&game.scenario_data);
 

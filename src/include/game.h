@@ -56,6 +56,26 @@ enum
     SCENARIO_MODE_CHALLENGE
 };
 
+typedef enum
+{
+    GAME_INPUT_NONE,
+    GAME_INPUT_MOUSE_BUTTON_DOWN,
+    GAME_INPUT_KEY_DOWN
+} game_input_type_t;
+
+typedef struct
+{
+    game_input_type_t type;
+    Sint32 mouseX;
+    Sint32 mouseY;
+
+    union
+    {
+        Uint8 mouse_button_pressed;
+        SDL_Keycode key_pressed;
+    };
+} game_input_t;
+
 typedef struct
 {
     board_unit_t board_side_size;
@@ -84,6 +104,10 @@ typedef struct
 
     SDL_Window* window;
     SDL_Renderer* renderer;
+
+    game_input_t input;
+
+    void (*update) ();
 
     union
     {
@@ -137,7 +161,13 @@ typedef struct
 
 extern game_t game;
 
-void game_update();
+void game_catch_input(const SDL_Event* event);
+
+void game_update_menu();
+void game_update_file_browser();
+void game_update_scenario();
+void game_update_editor();
+
 void game_mouse_motion();
 void game_mouse_button_down(Uint8 mouse_button, Sint32 mouse_x, Sint32 mouse_y);
 void game_key_down(SDL_Keycode key);
