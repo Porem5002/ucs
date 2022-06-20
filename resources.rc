@@ -1,0 +1,3 @@
+#include <windows.h>
+
+APP_UCS_ICON ICON "sprites/ucs_icon.ico"
