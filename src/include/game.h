@@ -168,10 +168,6 @@ void game_update_file_browser();
 void game_update_scenario();
 void game_update_editor();
 
-void game_mouse_motion();
-void game_mouse_button_down(Uint8 mouse_button, Sint32 mouse_x, Sint32 mouse_y);
-void game_key_down(SDL_Keycode key);
-
 void game_set_mode_menu(void* event_data);
 void game_set_mode_file_browser(void* event_data);
 void game_set_mode_scenario(void* event_data);
