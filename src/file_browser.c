@@ -4,8 +4,8 @@
 #include "include/scenario_loader.h"
 #include "include/rendering.h"
 
-#define FILE_BROWSER_SCENARIOS_PER_PAGE 6
-#define ID_ANCHOR 1
+#define FILE_BROWSER_SCENARIOS_PER_PAGE 8
+#define ID_ANCHOR 3
 #define SCENARIO_ICON_SIDE 250
 #define SCENARIO_TEXT_OFFSET 180
 #define SCENARIO_SPACING 450
@@ -28,8 +28,12 @@ void game_set_mode_file_browser(void* event_data)
     SDL_Texture* default_scenario_name = assetman_get_asset(DEFAULT_SCENARIO_NAME_TEXTURE_ID);
     
     SDL_Texture* back_button_text_texture = sui_texture_from_text(game.renderer, main_font, UI_BACK_BUTTON_TEXT, (SDL_Color){ 0, 0, 0, 255 });
+    SDL_Texture* next_page_button_texture = sui_load_texture("sprites/next_page.png", game.renderer, NULL);
+    SDL_Texture* prev_page_button_texture = sui_load_texture("sprites/prev_page.png", game.renderer, NULL);
 
     assetman_set_asset(assetman_dynamic_id(0), TEXTURE_ASSET_TYPE, back_button_text_texture);
+    assetman_set_asset(assetman_dynamic_id(1), TEXTURE_ASSET_TYPE, next_page_button_texture);
+    assetman_set_asset(assetman_dynamic_id(2), TEXTURE_ASSET_TYPE, prev_page_button_texture);
 
     size_t id = ID_ANCHOR;
 
@@ -105,22 +109,22 @@ static void file_browser_update()
 
     if(!pager_is_first_page(&game.file_browser_pager))
     {
-        SDL_Rect prev_page_button_rect = { 0, 0, 40, 40 };
+        SDL_Rect prev_page_button_rect = { 120, 0, 120, 160 };
 
-        prev_page_button_rect.y = SCREEN_HEIGHT/2 - 20;
+        prev_page_button_rect.y = SCREEN_HEIGHT/2 - 160/2;
 
         sui_button_element_add(&prev_page_button_rect, file_browser_go_to_prev_page, NULL);
-        sui_solid_rect_element_add(&prev_page_button_rect, (SDL_Color){ 255, 255, 255, 255 });
+        sui_texture_element_add(&prev_page_button_rect, assetman_get_asset(assetman_dynamic_id(2)));
     }
 
     if(!pager_is_last_page(&game.file_browser_pager))
     {
-        SDL_Rect next_page_button_rect = { SCREEN_WIDTH - 40, 0, 40, 40 };
+        SDL_Rect next_page_button_rect = { SCREEN_WIDTH - 120 - 120, 0, 120, 160 };
         
-        next_page_button_rect.y = SCREEN_HEIGHT/2 - 20;
+        next_page_button_rect.y = SCREEN_HEIGHT/2 - 160/2;
 
         sui_button_element_add(&next_page_button_rect, file_browser_go_to_next_page, NULL);
-        sui_solid_rect_element_add(&next_page_button_rect, (SDL_Color){ 255, 255, 255, 255 });
+        sui_texture_element_add(&next_page_button_rect, assetman_get_asset(assetman_dynamic_id(1)));
     }
 
     SDL_Color background_color = { 135, 131, 209, 255 };
