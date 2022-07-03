@@ -2,25 +2,26 @@
 #include "include/SDL2/SDL.h"
 #include "include/SDL2/SDL_image.h"
 #include "include/SDL2/SDL_ttf.h"
+#include "include/scenario_loader.h"
 #include "include/assetman_setup.h"
 #include "include/rendering.h"
 
 void setup_initial_assets(SDL_Renderer* renderer)
 {
-    TTF_Font* main_font = TTF_OpenFont("fonts/main_text.ttf", 45);
-    TTF_Font* title_font = TTF_OpenFont("fonts/main_text.ttf", 150);
-    TTF_Font* browser_font = TTF_OpenFont("fonts/main_text.ttf", 35);
+    TTF_Font* main_font = TTF_OpenFont(PATH_FONTS "main_text.ttf", 45);
+    TTF_Font* title_font = TTF_OpenFont(PATH_FONTS "main_text.ttf", 150);
+    TTF_Font* browser_font = TTF_OpenFont(PATH_FONTS "main_text.ttf", 35);
 
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "2");
 
-    SDL_Texture* white_peon_texture = sui_load_texture("sprites/white_peon.png", renderer, NULL);
-    SDL_Texture* white_queen_texture = sui_load_texture("sprites/white_queen.png", renderer, NULL);
-    SDL_Texture* black_peon_texture = sui_load_texture("sprites/black_peon.png", renderer, NULL);
-    SDL_Texture* black_queen_texture = sui_load_texture("sprites/black_queen.png", renderer, NULL);
-    SDL_Texture* correct_move_texture = sui_load_texture("sprites/correct_move.png", renderer, NULL);
-    SDL_Texture* incorrect_move_texture = sui_load_texture("sprites/incorrect_move.png", renderer, NULL);
-    SDL_Texture* remove_piece_texture = sui_load_texture("sprites/remove_piece.png", renderer, NULL);
-    SDL_Texture* default_scenario_icon_texture = sui_load_texture("sprites/default_scenario_icon.png", renderer, NULL);
+    SDL_Texture* white_peon_texture = sui_load_texture(PATH_IMAGES "white_peon.png", renderer, NULL);
+    SDL_Texture* white_queen_texture = sui_load_texture(PATH_IMAGES "white_queen.png", renderer, NULL);
+    SDL_Texture* black_peon_texture = sui_load_texture(PATH_IMAGES "black_peon.png", renderer, NULL);
+    SDL_Texture* black_queen_texture = sui_load_texture(PATH_IMAGES "black_queen.png", renderer, NULL);
+    SDL_Texture* correct_move_texture = sui_load_texture(PATH_IMAGES "correct_move.png", renderer, NULL);
+    SDL_Texture* incorrect_move_texture = sui_load_texture(PATH_IMAGES "incorrect_move.png", renderer, NULL);
+    SDL_Texture* remove_piece_texture = sui_load_texture(PATH_IMAGES "remove_piece.png", renderer, NULL);
+    SDL_Texture* default_scenario_icon_texture = sui_load_texture(PATH_IMAGES "default_scenario_icon.png", renderer, NULL);
     SDL_Texture* default_scenario_name_texture = sui_texture_from_text(renderer, browser_font, "???", (SDL_Color){ ATTRACTIVE_COLOR_VALS , 255});
 
     assetman_set_asset(MAIN_FONT_ID, FONT_ASSET_TYPE, main_font);

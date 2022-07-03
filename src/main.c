@@ -48,7 +48,7 @@ int main(int argc, char** argv)
     SDL_SetRenderDrawBlendMode(game.renderer, SDL_BLENDMODE_BLEND);
     SDL_RenderSetLogicalSize(game.renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
     
-    SDL_Surface* icon_surface = IMG_Load("sprites/ucs_icon.png");
+    SDL_Surface* icon_surface = IMG_Load(PATH_IMAGES "ucs_icon.png");
     
     SDL_SetWindowIcon(game.window, icon_surface);
 

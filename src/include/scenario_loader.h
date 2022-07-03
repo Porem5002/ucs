@@ -13,8 +13,10 @@
 
 #include "dtstructs.h"
 
-#define PATH_FOLDER_IMAGES      "sprites/"
-#define PATH_FOLDER_SCENARIOS   "scenarios/"
+#define PATH_FONTS               "fonts/"
+#define PATH_IMAGES              "images/"
+#define PATH_SCENARIOS_STANDARD  "scenarios/standard/"
+#define PATH_SCENARIOS_EDITOR    "scenarios/editor/"
 #define SCENARIO_FILE_EXTENSION   ".sch"
 
 typedef struct 

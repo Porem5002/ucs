@@ -48,7 +48,7 @@ void load_scenario_from_file(scenario_t* destination, string_t scenario_file_nam
     size_t scenario_src_size;
     string_t scenario_src;
     
-    string_t scenario_file_path = string_heap_concat(PATH_FOLDER_SCENARIOS, scenario_file_name);
+    string_t scenario_file_path = string_heap_concat(PATH_SCENARIOS_STANDARD, scenario_file_name);
     
     f = fopen(scenario_file_path, "rb");
 
@@ -90,7 +90,7 @@ array(string_t) get_scenario_file_names_list()
     struct _finddata_t current_file_data;
     intptr_t hFile;
 
-    hFile = _findfirst(PATH_FOLDER_SCENARIOS "*" SCENARIO_FILE_EXTENSION, &current_file_data);
+    hFile = _findfirst(PATH_SCENARIOS_STANDARD "*" SCENARIO_FILE_EXTENSION, &current_file_data);
 
     if(hFile != -1L)
     {
@@ -115,7 +115,7 @@ scenario_info_t get_scenario_info_from_file(string_t scenario_file_name)
     size_t scenario_src_size;
     string_t scenario_src;
     
-    string_t scenario_file_path = string_heap_concat(PATH_FOLDER_SCENARIOS, scenario_file_name);
+    string_t scenario_file_path = string_heap_concat(PATH_SCENARIOS_STANDARD, scenario_file_name);
     
     f = fopen(scenario_file_path, "rb");
 
