@@ -7,9 +7,9 @@
 
 void setup_initial_assets(SDL_Renderer* renderer)
 {
-    TTF_Font* main_font = TTF_OpenFont("fonts/main_text.ttf", 75);
+    TTF_Font* main_font = TTF_OpenFont("fonts/main_text.ttf", 45);
     TTF_Font* title_font = TTF_OpenFont("fonts/main_text.ttf", 150);
-    TTF_Font* browser_font = TTF_OpenFont("fonts/main_text.ttf", 45);
+    TTF_Font* browser_font = TTF_OpenFont("fonts/main_text.ttf", 35);
 
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "2");
 

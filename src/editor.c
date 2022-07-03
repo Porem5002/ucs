@@ -67,13 +67,13 @@ void game_set_mode_editor(void* event_data)
     game.screen_scenario_board_rect = (SDL_Rect){ 0, 0, BOARD_SECTION_WIDTH, BOARD_SECTION_HEIGHT };
     game.screen_scenario_ui_rect = (SDL_Rect){ BOARD_SECTION_WIDTH, 0, SCREEN_WIDTH - BOARD_SECTION_WIDTH, BOARD_SECTION_HEIGHT };
 
-    SDL_Texture* main_section_label = sui_texture_from_text(game.renderer, assetman_get_asset(BROWSER_FONT_ID), "PRINCIPAL", (SDL_Color){ ATTRACTIVE_COLOR_VALS, 255 });
-    SDL_Texture* rules_section_label = sui_texture_from_text(game.renderer, assetman_get_asset(BROWSER_FONT_ID), "REGRAS", (SDL_Color){ ATTRACTIVE_COLOR_VALS, 255 });
-    SDL_Texture* pieces_section_label = sui_texture_from_utf8_text(game.renderer, assetman_get_asset(BROWSER_FONT_ID), "PEÇAS", (SDL_Color){ ATTRACTIVE_COLOR_VALS, 255 });
+    SDL_Texture* main_section_label = sui_texture_from_text(game.renderer, assetman_get_asset(MAIN_FONT_ID), "PRINCIPAL", (SDL_Color){ ATTRACTIVE_COLOR_VALS, 255 });
+    SDL_Texture* rules_section_label = sui_texture_from_text(game.renderer, assetman_get_asset(MAIN_FONT_ID), "REGRAS", (SDL_Color){ ATTRACTIVE_COLOR_VALS, 255 });
+    SDL_Texture* pieces_section_label = sui_texture_from_utf8_text(game.renderer, assetman_get_asset(MAIN_FONT_ID), "PEÇAS", (SDL_Color){ ATTRACTIVE_COLOR_VALS, 255 });
 
-    SDL_Texture* selected_main_section_label = sui_texture_from_text(game.renderer, assetman_get_asset(BROWSER_FONT_ID), "PRINCIPAL", (SDL_Color){ MIDDLE_COLOR_VALS, 255 });
-    SDL_Texture* selected_rules_section_label = sui_texture_from_text(game.renderer, assetman_get_asset(BROWSER_FONT_ID), "REGRAS", (SDL_Color){ MIDDLE_COLOR_VALS, 255 });
-    SDL_Texture* selected_pieces_section_label = sui_texture_from_utf8_text(game.renderer, assetman_get_asset(BROWSER_FONT_ID), "PEÇAS", (SDL_Color){ MIDDLE_COLOR_VALS, 255 });
+    SDL_Texture* selected_main_section_label = sui_texture_from_text(game.renderer, assetman_get_asset(MAIN_FONT_ID), "PRINCIPAL", (SDL_Color){ MIDDLE_COLOR_VALS, 255 });
+    SDL_Texture* selected_rules_section_label = sui_texture_from_text(game.renderer, assetman_get_asset(MAIN_FONT_ID), "REGRAS", (SDL_Color){ MIDDLE_COLOR_VALS, 255 });
+    SDL_Texture* selected_pieces_section_label = sui_texture_from_utf8_text(game.renderer, assetman_get_asset(MAIN_FONT_ID), "PEÇAS", (SDL_Color){ MIDDLE_COLOR_VALS, 255 });
 
     SDL_Texture* true_value_label = sui_texture_from_text(game.renderer, assetman_get_asset(MAIN_FONT_ID), "SIM", (SDL_Color){ MIDDLE_COLOR_VALS, 255 });
     SDL_Texture* false_value_label = sui_texture_from_utf8_text(game.renderer, assetman_get_asset(MAIN_FONT_ID), "NÃO", (SDL_Color){ MIDDLE_COLOR_VALS, 255 });
@@ -83,7 +83,7 @@ void game_set_mode_editor(void* event_data)
     SDL_Texture* board_size_label_12x12 = sui_texture_from_text(game.renderer, assetman_get_asset(MAIN_FONT_ID), "12x12", (SDL_Color){0,0,0,255});
 
     SDL_Texture* double_corner_label_right = sui_texture_from_text(game.renderer, assetman_get_asset(MAIN_FONT_ID), "DIREITO", (SDL_Color){0,0,0,255});
-    SDL_Texture* double_corner_label_left = sui_texture_from_text(game.renderer, assetman_get_asset(BROWSER_FONT_ID), "ESQUERDO", (SDL_Color){0,0,0,255});
+    SDL_Texture* double_corner_label_left = sui_texture_from_text(game.renderer, assetman_get_asset(MAIN_FONT_ID), "ESQUERDO", (SDL_Color){0,0,0,255});
 
     SDL_Texture* save_label = sui_texture_from_text(game.renderer, assetman_get_asset(MAIN_FONT_ID), "SALVAR", (SDL_Color){0,0,0,255});
 
