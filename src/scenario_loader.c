@@ -42,17 +42,13 @@ void load_scenario_from_token_array(scenario_t* destination, array(token_t) toke
     }
 }
 
-void load_scenario_from_file(scenario_t* destination, string_t scenario_file_name)
+void load_scenario_from_file(scenario_t* destination, string_t file_path)
 {
     FILE* f;
     size_t scenario_src_size;
     string_t scenario_src;
-    
-    string_t scenario_file_path = string_heap_concat(PATH_SCENARIOS_STANDARD, scenario_file_name);
-    
-    f = fopen(scenario_file_path, "rb");
 
-    free(scenario_file_path);
+    f = fopen(file_path, "rb");
 
     fseek(f, 0, SEEK_END);
     scenario_src_size = ftell(f);
@@ -84,42 +80,41 @@ void load_scenario_from_file(scenario_t* destination, string_t scenario_file_nam
     array_free(&tokens);
 }
 
-array(string_t) get_scenario_file_names_list()
+array(string_t) get_scenario_paths_from_dir(string_t dir_path)
 {
-    dynarray(string_t) file_names_list = dynarray_new(string_t, 0);
+    dynarray(string_t) file_paths_list = dynarray_new(string_t, 0);
     struct _finddata_t current_file_data;
+    string_t general_path = string_heap_concat(dir_path, "*" SCENARIO_FILE_EXTENSION);
     intptr_t hFile;
 
-    hFile = _findfirst(PATH_SCENARIOS_STANDARD "*" SCENARIO_FILE_EXTENSION, &current_file_data);
+    hFile = _findfirst(general_path, &current_file_data);
 
     if(hFile != -1L)
     {
-        string_t current_file_name = string_heap_copy(current_file_data.name);
-        dynarray_add(&file_names_list, string_t, &current_file_name);
+        string_t current_file_path = string_heap_concat(dir_path, current_file_data.name);
+        dynarray_add(&file_paths_list, string_t, &current_file_path);
 
         while(_findnext(hFile, &current_file_data) == 0)
         {
-            current_file_name = string_heap_copy(current_file_data.name);
-            dynarray_add(&file_names_list, string_t, &current_file_name);
+            current_file_path = string_heap_concat(dir_path, current_file_data.name);
+            dynarray_add(&file_paths_list, string_t, &current_file_path);
         }
             
         _findclose(hFile);
     }
 
-    return dynarray_to_array(&file_names_list, string_t);
+    free(general_path);
+
+    return dynarray_to_array(&file_paths_list, string_t);
 }
 
-scenario_info_t get_scenario_info_from_file(string_t scenario_file_name)
+scenario_info_t get_scenario_info_from_file(string_t file_path)
 {
     FILE* f;
     size_t scenario_src_size;
     string_t scenario_src;
     
-    string_t scenario_file_path = string_heap_concat(PATH_SCENARIOS_STANDARD, scenario_file_name);
-    
-    f = fopen(scenario_file_path, "rb");
-
-    free(scenario_file_path);
+    f = fopen(file_path, "rb");
 
     fseek(f, 0, SEEK_END);
     scenario_src_size = ftell(f);

@@ -287,13 +287,13 @@ void game_free_dependencies()
         case MODE_EDITOR:
             break;
         case MODE_FILE_BROWSER:
-            for (size_t i = 0; i < array_size(&game.file_browser_file_names_list); i++)
+            for (size_t i = 0; i < array_size(&game.file_browser_file_paths); i++)
             {
-                string_t current_name = array_ele(&game.file_browser_file_names_list, string_t, i);
-                free(current_name);
+                string_t current_path = array_ele(&game.file_browser_file_paths, string_t, i);
+                free(current_path);
             }
 
-            array_free(&game.file_browser_file_names_list);
+            array_free(&game.file_browser_file_paths);
             break;
         case MODE_SCENARIO:
             if(game.scenario_data.scenario_mode == SCENARIO_MODE_1V1)

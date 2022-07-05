@@ -148,7 +148,7 @@ typedef struct
 
         struct
         {
-            array(string_t) file_browser_file_names_list;
+            array(string_t) file_browser_file_paths;
             pager_t file_browser_pager;
         };
     };

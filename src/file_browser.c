@@ -36,12 +36,12 @@ void game_set_mode_file_browser(void* event_data)
 
     size_t id = ID_ANCHOR;
 
-    game.file_browser_file_names_list = get_scenario_file_names_list();
+    game.file_browser_file_paths = get_scenario_paths_from_dir(PATH_SCENARIOS_STANDARD);
 
-    for (size_t i = 0; i < array_size(&game.file_browser_file_names_list); i++)
+    for (size_t i = 0; i < array_size(&game.file_browser_file_paths); i++)
     {
-        string_t scenario_file_name = array_ele(&game.file_browser_file_names_list, string_t, i);
-        scenario_info_t given_scenario_info = get_scenario_info_from_file(scenario_file_name);
+        string_t current_file_path = array_ele(&game.file_browser_file_paths, string_t, i);
+        scenario_info_t given_scenario_info = get_scenario_info_from_file(current_file_path);
         
         if(given_scenario_info.icon_texture != NULL)
             assetman_set_asset(assetman_dynamic_id(id), TEXTURE_ASSET_TYPE, given_scenario_info.icon_texture);
@@ -58,7 +58,7 @@ void game_set_mode_file_browser(void* event_data)
         id++;
     }
 
-    pager_init(&game.file_browser_pager, array_size(&game.file_browser_file_names_list), FILE_BROWSER_SCENARIOS_PER_PAGE);
+    pager_init(&game.file_browser_pager, array_size(&game.file_browser_file_paths), FILE_BROWSER_SCENARIOS_PER_PAGE);
     pager_next_page(&game.file_browser_pager);
 
     file_browser_update();
@@ -88,9 +88,9 @@ static void file_browser_update()
         size_t name_asset_id = i*2 + ID_ANCHOR + 1;
 
         size_t i_relative_to_page = game.file_browser_pager.current_page_end - i - 1;
-        string_t name_of_scenario_file_to_load = array_ele(&game.file_browser_file_names_list, string_t, i);
+        string_t path_of_scenario_to_load = array_ele(&game.file_browser_file_paths, string_t, i);
         
-        sui_button_element_add(&row_rects[i_relative_to_page], game_set_mode_scenario, name_of_scenario_file_to_load);
+        sui_button_element_add(&row_rects[i_relative_to_page], game_set_mode_scenario, path_of_scenario_to_load);
         sui_texture_element_add(&row_rects[i_relative_to_page], assetman_get_asset(assetman_dynamic_id(icon_asset_id)));
 
         SDL_Texture* name_texture = assetman_get_asset(assetman_dynamic_id(name_asset_id));

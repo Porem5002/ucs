@@ -2,6 +2,7 @@
 
 #include "include/game.h"
 #include "include/assetman_setup.h"
+#include "include/scenario_loader.h"
 #include "include/editor.h"
 #include "include/rendering.h"
 
@@ -114,7 +115,7 @@ void save_scenario_as_sch_file(void* event_data)
 {
     scenario_t* scenario = event_data;
 
-    FILE* f = fopen("scenarios/editor.sch", "wb");
+    FILE* f = fopen(PATH_SCENARIOS_EDITOR "editor.sch", "wb");
 
     if(f == NULL) exit(EXIT_FAILURE);
 

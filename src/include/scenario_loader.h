@@ -38,8 +38,8 @@ void load_scenario_from_token_array(scenario_t* destination, array(token_t) scen
 
 void load_scenario_from_file(scenario_t* destination, string_t scenario_file_name);
 
-array(string_t) get_scenario_file_names_list();
+array(string_t) get_scenario_paths_from_dir(string_t dir_path);
 
-scenario_info_t get_scenario_info_from_file(string_t scenario_file_name);
+scenario_info_t get_scenario_info_from_file(string_t file_path);
 
 #endif
