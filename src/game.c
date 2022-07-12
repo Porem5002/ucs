@@ -8,7 +8,6 @@
 #include "include/sui.h"
 #include "include/game.h"
 #include "include/editor.h"
-#include "include/file_browser.h"
 #include "include/scenario_loader.h"
 #include "include/rendering.h"
 
@@ -20,7 +19,7 @@ void game_update_menu()
         sui_check_buttons(game.input.mouseX, game.input.mouseY);
 }
 
-void game_update_file_browser()
+void game_update_selector()
 {
     if(game.input.type == GAME_INPUT_MOUSE_BUTTON_DOWN && game.input.mouse_button_pressed == SDL_BUTTON_LEFT)
         sui_check_buttons(game.input.mouseX, game.input.mouseY);
@@ -141,7 +140,7 @@ void game_set_mode_menu(void* event_data)
 
     sui_rect_row(&menu_options_rect, button_rects, 3, 300, 100, 50);
 
-    sui_simple_button_t* start_button = sui_simple_button_with_text_add(game.renderer, &button_rects[0], main_font, UI_START_BUTTON_TEXT, game_set_mode_file_browser, NULL, text_color, button_background_color);
+    sui_simple_button_t* start_button = sui_simple_button_with_text_add(game.renderer, &button_rects[0], main_font, UI_START_BUTTON_TEXT, game_set_mode_selector, NULL, text_color, button_background_color);
     sui_simple_button_t* editor_button = sui_simple_button_with_text_add(game.renderer, &button_rects[1], main_font, UI_EDITOR_BUTTON_TEXT, game_set_mode_editor, NULL, text_color, button_background_color);
     sui_simple_button_t* quit_button = sui_simple_button_with_text_add(game.renderer, &button_rects[2], main_font, UI_QUIT_BUTTON_TEXT, game_quit, NULL, text_color, button_background_color);
     
@@ -286,14 +285,14 @@ void game_free_dependencies()
             break;
         case MODE_EDITOR:
             break;
-        case MODE_FILE_BROWSER:
-            for (size_t i = 0; i < array_size(&game.file_browser_file_paths); i++)
+        case MODE_SELECTOR:
+            for (size_t i = 0; i < array_size(&game.selector.file_paths); i++)
             {
-                string_t current_path = array_ele(&game.file_browser_file_paths, string_t, i);
+                string_t current_path = array_ele(&game.selector.file_paths, string_t, i);
                 free(current_path);
             }
 
-            array_free(&game.file_browser_file_paths);
+            array_free(&game.selector.file_paths);
             break;
         case MODE_SCENARIO:
             if(game.scenario_data.scenario_mode == SCENARIO_MODE_1V1)

@@ -1,26 +1,30 @@
 #include "include/game.h"
 #include "include/assetman_setup.h"
-#include "include/file_browser.h"
 #include "include/scenario_loader.h"
 #include "include/rendering.h"
 
-#define FILE_BROWSER_SCENARIOS_PER_PAGE 8
+#define GSELECTOR_STANDARD NULL
+#define GSELECTOR_EDITOR ((void*)1)
+
+#define SELECTOR_ITEMS_PER_PAGE 8
 #define ID_ANCHOR 3
 #define SCENARIO_ICON_SIDE 250
 #define SCENARIO_TEXT_OFFSET 180
 #define SCENARIO_SPACING 450
 
-static void file_browser_update();
-static void file_browser_go_to_next_page(void* event_data);
-static void file_browser_go_to_prev_page(void* event_data);
+static void selector_refresh();
+static void selector_go_to_next_page(void* event_data);
+static void selector_go_to_prev_page(void* event_data);
 
-void game_set_mode_file_browser(void* event_data)
+void game_set_mode_selector(void* event_data)
 {
     LOGGER_LOGS("Started loading Scenario Browser!");
 
+    event_data = event_data == GSELECTOR_STANDARD ? PATH_SCENARIOS_STANDARD : PATH_SCENARIOS_EDITOR;
+
     game_free_dependencies();
-    game.mode = MODE_FILE_BROWSER;
-    game.update = game_update_file_browser;
+    game.mode = MODE_SELECTOR;
+    game.update = game_update_selector;
     sui_clear_elements();
 
     SDL_Texture* default_scenario_icon = assetman_get_asset(DEFAULT_SCENARIO_ICON_TEXTURE_ID);
@@ -36,11 +40,11 @@ void game_set_mode_file_browser(void* event_data)
 
     size_t id = ID_ANCHOR;
 
-    game.file_browser_file_paths = get_scenario_paths_from_dir(PATH_SCENARIOS_STANDARD);
+    game.selector.file_paths = get_scenario_paths_from_dir(event_data);
 
-    for (size_t i = 0; i < array_size(&game.file_browser_file_paths); i++)
+    for (size_t i = 0; i < array_size(&game.selector.file_paths); i++)
     {
-        string_t current_file_path = array_ele(&game.file_browser_file_paths, string_t, i);
+        string_t current_file_path = array_ele(&game.selector.file_paths, string_t, i);
         scenario_info_t given_scenario_info = get_scenario_info_from_file(current_file_path);
         
         if(given_scenario_info.icon_texture != NULL)
@@ -58,37 +62,37 @@ void game_set_mode_file_browser(void* event_data)
         id++;
     }
 
-    pager_init(&game.file_browser_pager, array_size(&game.file_browser_file_paths), FILE_BROWSER_SCENARIOS_PER_PAGE);
-    pager_next_page(&game.file_browser_pager);
+    pager_init(&game.selector.pager, array_size(&game.selector.file_paths), SELECTOR_ITEMS_PER_PAGE);
+    pager_next_page(&game.selector.pager);
 
-    file_browser_update();
+    selector_refresh();
 
     LOGGER_LOGS("Finished loading Scenario Browser!");
 }
 
-static void file_browser_update()
+static void selector_refresh()
 {
     SDL_Rect row_area_rect = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT/2 };
-    SDL_Rect row_rects[FILE_BROWSER_SCENARIOS_PER_PAGE];
+    SDL_Rect row_rects[SELECTOR_ITEMS_PER_PAGE];
 
     sui_clear_elements();
 
-    sui_rect_row(&row_area_rect, row_rects, FILE_BROWSER_SCENARIOS_PER_PAGE/2, SCENARIO_ICON_SIDE, SCENARIO_ICON_SIDE, 20);    
+    sui_rect_row(&row_area_rect, row_rects, SELECTOR_ITEMS_PER_PAGE/2, SCENARIO_ICON_SIDE, SCENARIO_ICON_SIDE, 20);    
 
-    if(game.file_browser_pager.current_page_end - game.file_browser_pager.current_page_start > FILE_BROWSER_SCENARIOS_PER_PAGE/2)
+    if(game.selector.pager.current_page_end - game.selector.pager.current_page_start > SELECTOR_ITEMS_PER_PAGE/2)
     {
         /* Ajusts second row to be below the first row. */
         row_area_rect.y += SCENARIO_SPACING;
-        sui_rect_row(&row_area_rect, row_rects + FILE_BROWSER_SCENARIOS_PER_PAGE/2, FILE_BROWSER_SCENARIOS_PER_PAGE/2, SCENARIO_ICON_SIDE, SCENARIO_ICON_SIDE, 20);
+        sui_rect_row(&row_area_rect, row_rects + SELECTOR_ITEMS_PER_PAGE/2, SELECTOR_ITEMS_PER_PAGE/2, SCENARIO_ICON_SIDE, SCENARIO_ICON_SIDE, 20);
     }
 
-    for (size_t i = game.file_browser_pager.current_page_start; i < game.file_browser_pager.current_page_end; i++)
+    for (size_t i = game.selector.pager.current_page_start; i < game.selector.pager.current_page_end; i++)
     {
         size_t icon_asset_id = i*2 + ID_ANCHOR; 
         size_t name_asset_id = i*2 + ID_ANCHOR + 1;
 
-        size_t i_relative_to_page = game.file_browser_pager.current_page_end - i - 1;
-        string_t path_of_scenario_to_load = array_ele(&game.file_browser_file_paths, string_t, i);
+        size_t i_relative_to_page = game.selector.pager.current_page_end - i - 1;
+        string_t path_of_scenario_to_load = array_ele(&game.selector.file_paths, string_t, i);
         
         sui_button_element_add(&row_rects[i_relative_to_page], game_set_mode_scenario, path_of_scenario_to_load);
         sui_texture_element_add(&row_rects[i_relative_to_page], assetman_get_asset(assetman_dynamic_id(icon_asset_id)));
@@ -106,23 +110,23 @@ static void file_browser_update()
         sui_texture_element_add(&text_rect, name_texture);
     }
 
-    if(!pager_is_first_page(&game.file_browser_pager))
+    if(!pager_is_first_page(&game.selector.pager))
     {
         SDL_Rect prev_page_button_rect = { 120, 0, 120, 160 };
 
         prev_page_button_rect.y = SCREEN_HEIGHT/2 - 160/2;
 
-        sui_button_element_add(&prev_page_button_rect, file_browser_go_to_prev_page, NULL);
+        sui_button_element_add(&prev_page_button_rect, selector_go_to_prev_page, NULL);
         sui_texture_element_add(&prev_page_button_rect, assetman_get_asset(assetman_dynamic_id(2)));
     }
 
-    if(!pager_is_last_page(&game.file_browser_pager))
+    if(!pager_is_last_page(&game.selector.pager))
     {
         SDL_Rect next_page_button_rect = { SCREEN_WIDTH - 120 - 120, 0, 120, 160 };
         
         next_page_button_rect.y = SCREEN_HEIGHT/2 - 160/2;
 
-        sui_button_element_add(&next_page_button_rect, file_browser_go_to_next_page, NULL);
+        sui_button_element_add(&next_page_button_rect, selector_go_to_next_page, NULL);
         sui_texture_element_add(&next_page_button_rect, assetman_get_asset(assetman_dynamic_id(1)));
     }
 
@@ -136,14 +140,14 @@ static void file_browser_update()
     sui_simple_button_with_texture_add(&back_button_rect, back_button_text_texture, game_set_mode_menu, NULL, background_color);
 }
 
-static void file_browser_go_to_next_page(void* event_data)
+static void selector_go_to_next_page(void* event_data)
 {
-    pager_next_page(&game.file_browser_pager);
-    file_browser_update();
+    pager_next_page(&game.selector.pager);
+    selector_refresh();
 }
 
-static void file_browser_go_to_prev_page(void* event_data)
+static void selector_go_to_prev_page(void* event_data)
 {
-    pager_prev_page(&game.file_browser_pager);
-    file_browser_update();
+    pager_prev_page(&game.selector.pager);
+    selector_refresh();
 }

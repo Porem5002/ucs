@@ -17,7 +17,7 @@ void render_frame()
         case MODE_EDITOR:
             render_frame_editor();
             break;
-        case MODE_FILE_BROWSER:
+        case MODE_SELECTOR:
             sui_draw_elements(game.renderer);
             break;
         case MODE_SCENARIO:

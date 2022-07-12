@@ -3,8 +3,6 @@
 
 #include "game.h"
 
-void game_set_mode_editor(void* event_data);
-
 void save_scenario_as_sch_file(void* event_data);
 
 #endif

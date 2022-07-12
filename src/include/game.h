@@ -46,7 +46,7 @@ enum
 {
     MODE_MENU,
     MODE_EDITOR,
-    MODE_FILE_BROWSER,
+    MODE_SELECTOR,
     MODE_SCENARIO
 };
 
@@ -95,6 +95,12 @@ typedef struct
     bool flying_kings;
     bool is_white_peon_forward_top_to_bottom;
 } scenario_t;
+
+typedef struct
+{
+    array(string_t) file_paths;
+    pager_t pager;
+} game_selector_t;
 
 typedef struct
 {    
@@ -146,11 +152,7 @@ typedef struct
             bool scenario_game_over_reached;
         };
 
-        struct
-        {
-            array(string_t) file_browser_file_paths;
-            pager_t file_browser_pager;
-        };
+        game_selector_t selector;
     };
 
     float delta_time;
@@ -164,13 +166,14 @@ extern game_t game;
 void game_catch_input(const SDL_Event* event);
 
 void game_update_menu();
-void game_update_file_browser();
+void game_update_selector();
 void game_update_scenario();
 void game_update_editor();
 
 void game_set_mode_menu(void* event_data);
-void game_set_mode_file_browser(void* event_data);
+void game_set_mode_selector(void* event_data);
 void game_set_mode_scenario(void* event_data);
+void game_set_mode_editor(void* event_data);
 void game_1v1_scenario_set_capture_data();
 
 void game_free_dependencies();
