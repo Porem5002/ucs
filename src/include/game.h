@@ -100,6 +100,7 @@ typedef struct
 {
     array(string_t) file_paths;
     pager_t pager;
+    bool is_standard_section;
 } game_selector_t;
 
 typedef struct
