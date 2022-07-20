@@ -57,8 +57,7 @@ cell_id_t cell_position_to_cell_id(board_position_t cell_position)
     return cell_position.y * (game.scenario_data.board_side_size / 2) + cell_position.x / 2;
 }
 
-
-void board_apply_move(board_t* board, move_info_t move, bool is_simulated)
+void board_apply_move(board_t* board, move_info_t move)
 {
     board->playable_cells[move.destination_cell] = board->playable_cells[move.source_cell];
     board->playable_cells[move.source_cell] = NO_PIECE;
@@ -82,7 +81,7 @@ tree_t board_generate_capture_tree(board_t* initial_board)
         move_info_t current_move = dynarray_ele(&capture_moves, move_info_t, i);
 
         internal_board = *initial_board;
-        board_apply_move(&internal_board, current_move, true);
+        board_apply_move(&internal_board, current_move);
         
         subtree = board_generate_capture_tree_for_move(&internal_board, current_move);
         tree_insert_subtree(capture_tree, subtree);
@@ -139,7 +138,7 @@ static tree_t board_generate_capture_tree_for_move(board_t* current_board, move_
             continue;
 
         internal_board = *current_board;
-        board_apply_move(&internal_board, current_move, true);
+        board_apply_move(&internal_board, current_move);
 
         subtree = board_generate_capture_tree_for_move(&internal_board, current_move);
         tree_insert_subtree(capture_tree, subtree);

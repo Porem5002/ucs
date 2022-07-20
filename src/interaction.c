@@ -27,7 +27,7 @@ void challenge_auto_play()
     move_info_t expected_move = array_ele(&game.scenario_data.challenge_moves, move_info_t, game.current_challenge_move_index);
     game.current_challenge_move_index++;
     
-    board_apply_move(&game.scenario_data.board, expected_move, false);
+    board_apply_move(&game.scenario_data.board, expected_move);
 
     move_info_t next_expected_move = array_ele(&game.scenario_data.challenge_moves, move_info_t, game.current_challenge_move_index);
 
@@ -35,36 +35,6 @@ void challenge_auto_play()
 
     promote_to_queen_if_valid(expected_move.destination_cell);
     switch_teams();
-}
-
-void on_screen_clicked(Uint8 button_clicked, Sint32 pixelX, Sint32 pixelY)
-{
-    uint8_t initial_mode = game.mode;
-
-    if(button_clicked == SDL_BUTTON_LEFT) sui_check_buttons(pixelX, pixelY);
-
-    if(game.mode != initial_mode) return;
-    
-    if(game.mode == MODE_EDITOR)
-    {
-        place_piece_on_hovered_cell();
-        LOGGER_LOGS("Editor Place Piece");
-        return;
-    }
-
-    if(game.mode != MODE_SCENARIO) return;
-
-    switch (button_clicked)
-    {
-        case SDL_BUTTON_LEFT:
-            select_hovered_piece();
-            break;
-        case SDL_BUTTON_RIGHT:
-            move_selected_piece_to_hovered_cell();
-            break;
-        default:
-            break;
-    }
 }
 
 void place_piece_on_hovered_cell()
@@ -167,7 +137,7 @@ static void move_selected_piece_in_1v1_scenario(incomplete_move_info_t incomplet
         complete_move.destination_cell = incomplete_move.destination_cell;
     }
 
-    board_apply_move(&game.scenario_data.board, complete_move, false);
+    board_apply_move(&game.scenario_data.board, complete_move);
 
     if(updated_current_capture_tree != NULL && tree_child_count(updated_current_capture_tree) > 0) 
     {
@@ -200,7 +170,7 @@ static void move_selected_piece_in_challenge_scenario(incomplete_move_info_t inc
     
     game.current_challenge_move_index++;
 
-    board_apply_move(&game.scenario_data.board, expected_move, false);
+    board_apply_move(&game.scenario_data.board, expected_move);
 
     if(array_size(&game.scenario_data.challenge_moves) == game.current_challenge_move_index) return;
 

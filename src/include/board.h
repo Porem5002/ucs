@@ -70,7 +70,7 @@ board_position_t cell_id_to_cell_position(cell_id_t cell_id);
 
 cell_id_t cell_position_to_cell_id(board_position_t cell_position);
 
-void board_apply_move(board_t* board, move_info_t move, bool is_simulated);
+void board_apply_move(board_t* board, move_info_t move);
 
 tree_t board_generate_capture_tree(board_t* initial_board);
 
