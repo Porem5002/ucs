@@ -72,7 +72,9 @@ sui_element_t* sui_element_add(sui_element_type_t type, SDL_Rect* rect);
 
 sui_button_t* sui_button_element_add(SDL_Rect* rect, sui_click_event_t event, void* event_data);
 
-sui_texture_t* sui_texture_element_add(SDL_Rect* rect, SDL_Texture* texture);
+sui_texture_t* sui_texture_element_add_v1(SDL_Rect* rect, SDL_Texture* texture);
+
+sui_texture_t* sui_texture_element_add_v2(int x, int y, SDL_Texture* texture);
 
 sui_solid_rect_t* sui_solid_rect_element_add(SDL_Rect* rect, SDL_Color color);
 

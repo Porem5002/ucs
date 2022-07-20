@@ -26,6 +26,15 @@
 #define SELECTED_RULES_SECTION_TEXTURE_ID (assetman_dynamic_id(12))
 #define SELECTED_PIECES_SECTION_TEXTURE_ID (assetman_dynamic_id(13))
 
+#define BOARD_FIELD_TEXTURE_ID (assetman_dynamic_id(14))
+#define DOUBLE_CORNER_FIELD_TEXTURE_ID (assetman_dynamic_id(15))
+
+#define INITIAL_PLAYER_FIELD_TEXTURE_ID (assetman_dynamic_id(16))
+#define PEONS_CAPTURE_BACKWARDS_FIELD_TEXTURE_ID (assetman_dynamic_id(17))
+#define LAW_OF_QUANTITY_FIELD_TEXTURE_ID (assetman_dynamic_id(18))
+#define LAW_OF_QUALITY_FIELD_TEXTURE_ID (assetman_dynamic_id(19))
+#define FLYING_KINGS_FIELD_TEXTURE_ID (assetman_dynamic_id(20))
+
 static void editor_section_navbar(uint8_t selected_section);
 static void editor_set_main_section(void* event_data);
 static void editor_set_rules_section(void* event_data);
@@ -104,7 +113,26 @@ void game_set_mode_editor(void* event_data)
     assetman_set_asset(BOARD_12X12_TEXTURE_ID, TEXTURE_ASSET_TYPE, board_size_label_12x12);
     assetman_set_asset(DOUBLE_CORNER_LEFT_TEXTURE_ID, TEXTURE_ASSET_TYPE, double_corner_label_left);
     assetman_set_asset(DOUBLE_CORNER_RIGHT_TEXTURE_ID, TEXTURE_ASSET_TYPE, double_corner_label_right);
+    
     assetman_set_asset(SAVE_BUTTON_TEXTURE_ID, TEXTURE_ASSET_TYPE, save_label);
+
+    SDL_Texture* board_field_label = sui_texture_from_text(game.renderer, assetman_get_asset(BROWSER_FONT_ID), "TABULEIRO", (SDL_Color){ ATTRACTIVE_COLOR_VALS, 255 });
+    SDL_Texture* double_corner_field_label = sui_texture_from_text(game.renderer, assetman_get_asset(BROWSER_FONT_ID), "CANTO DUPLO", (SDL_Color){ ATTRACTIVE_COLOR_VALS, 255 });
+
+    assetman_set_asset(BOARD_FIELD_TEXTURE_ID, TEXTURE_ASSET_TYPE, board_field_label);
+    assetman_set_asset(DOUBLE_CORNER_FIELD_TEXTURE_ID, TEXTURE_ASSET_TYPE, double_corner_field_label);
+
+    SDL_Texture* initial_player_field_label = sui_texture_from_text(game.renderer, assetman_get_asset(BROWSER_FONT_ID), "JOGADOR INICIAL", (SDL_Color){ ATTRACTIVE_COLOR_VALS, 255 });
+    SDL_Texture* law_of_quantity_field_label = sui_texture_from_text(game.renderer, assetman_get_asset(BROWSER_FONT_ID), "LEI DA QUANTIDADE", (SDL_Color){ ATTRACTIVE_COLOR_VALS, 255 });
+    SDL_Texture* law_of_quality_field_label = sui_texture_from_text(game.renderer, assetman_get_asset(BROWSER_FONT_ID), "LEI DA QUALIDADE", (SDL_Color){ ATTRACTIVE_COLOR_VALS, 255 });
+    SDL_Texture* peons_capture_backwards_field_label = sui_texture_from_text(game.renderer, assetman_get_asset(BROWSER_FONT_ID), "PEÕS CAPTURAM PARA TRÁS", (SDL_Color){ ATTRACTIVE_COLOR_VALS, 255 });
+    SDL_Texture* flying_kings_field_label = sui_texture_from_text(game.renderer, assetman_get_asset(BROWSER_FONT_ID), "DAMAS VOADORAS", (SDL_Color){ ATTRACTIVE_COLOR_VALS, 255 });
+
+    assetman_set_asset(INITIAL_PLAYER_FIELD_TEXTURE_ID, TEXTURE_ASSET_TYPE, initial_player_field_label);
+    assetman_set_asset(FLYING_KINGS_FIELD_TEXTURE_ID, TEXTURE_ASSET_TYPE, flying_kings_field_label);
+    assetman_set_asset(PEONS_CAPTURE_BACKWARDS_FIELD_TEXTURE_ID, TEXTURE_ASSET_TYPE, peons_capture_backwards_field_label);
+    assetman_set_asset(LAW_OF_QUANTITY_FIELD_TEXTURE_ID, TEXTURE_ASSET_TYPE, law_of_quantity_field_label);
+    assetman_set_asset(LAW_OF_QUALITY_FIELD_TEXTURE_ID, TEXTURE_ASSET_TYPE, law_of_quality_field_label);
 
     editor_set_main_section(NULL);
     
@@ -180,7 +208,7 @@ static void editor_section_navbar(uint8_t selected_section)
     SDL_QueryTexture(selected_section_label, NULL, NULL, &selected_section_label_width, &selected_section_label_height);
     selected_section_label_rect = sui_rect_centered(&section_rects[selected_section], selected_section_label_width, selected_section_label_height);
     sui_solid_rect_element_add(&section_rects[selected_section], (SDL_Color){ ATTRACTIVE_COLOR_VALS, 255 });
-    sui_texture_element_add(&selected_section_label_rect, selected_section_label);
+    sui_texture_element_add_v1(&selected_section_label_rect, selected_section_label);
 }
 
 static void editor_set_main_section(void* event_data)
@@ -214,6 +242,9 @@ static void editor_set_main_section(void* event_data)
 
     board_size_button->button_trigger.as_button_element.event_data = &board_size_button->text.as_texture_element;
     double_corner_side_button->button_trigger.as_button_element.event_data = &double_corner_side_button->text.as_texture_element;
+
+    sui_texture_element_add_v2(button_row1_rects[0].x, button_row1_rects[0].y - 75, assetman_get_asset(BOARD_FIELD_TEXTURE_ID));
+    sui_texture_element_add_v2(button_row1_rects[1].x, button_row1_rects[1].y - 75, assetman_get_asset(DOUBLE_CORNER_FIELD_TEXTURE_ID));
 }
 
 static void editor_set_rules_section(void* event_data)
@@ -232,6 +263,9 @@ static void editor_set_rules_section(void* event_data)
     SDL_Rect starting_team_color_rect;
 
     sui_rect_column(&game.screen_scenario_ui_rect, rule_buttons_rects, 4, 260, 100, 15);
+
+    for (size_t i = 0; i < 4; i++) rule_buttons_rects[i].x += 200;
+
     starting_team_color_rect = sui_rect_centered(&rule_buttons_rects[0], 200, 65);
 
     sui_solid_rect_element_add(&rule_buttons_rects[0], (SDL_Color){ ATTRACTIVE_COLOR_VALS, 255 });
@@ -245,6 +279,11 @@ static void editor_set_rules_section(void* event_data)
     flying_kings_button->button_trigger.as_button_element.event_data = &flying_kings_button->text.as_texture_element;
     law_quantity_button->button_trigger.as_button_element.event_data = &law_quantity_button->text.as_texture_element;
     law_quality_button->button_trigger.as_button_element.event_data = &law_quality_button->text.as_texture_element;
+
+    sui_texture_element_add_v2(rule_buttons_rects[0].x - 400, rule_buttons_rects[0].y, assetman_get_asset(INITIAL_PLAYER_FIELD_TEXTURE_ID));
+    sui_texture_element_add_v2(rule_buttons_rects[1].x - 400, rule_buttons_rects[1].y, assetman_get_asset(FLYING_KINGS_FIELD_TEXTURE_ID));
+    sui_texture_element_add_v2(rule_buttons_rects[2].x - 400, rule_buttons_rects[2].y, assetman_get_asset(LAW_OF_QUANTITY_FIELD_TEXTURE_ID));
+    sui_texture_element_add_v2(rule_buttons_rects[3].x - 400, rule_buttons_rects[3].y, assetman_get_asset(LAW_OF_QUALITY_FIELD_TEXTURE_ID));
 }
 
 static void editor_set_pieces_section(void* event_data)

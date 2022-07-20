@@ -135,7 +135,7 @@ void game_set_mode_menu(void* event_data)
 
     SDL_Rect title_rect = sui_rect_centered(&game_title_rect, title_width, title_height);
 
-    sui_texture_element_add(&title_rect, title_text_texture);
+    sui_texture_element_add_v1(&title_rect, title_text_texture);
     sui_solid_rect_element_add(&menu_options_rect, menu_options_bg);
 
     sui_rect_row(&menu_options_rect, button_rects, 3, 300, 100, 50);
@@ -198,7 +198,7 @@ void game_set_mode_scenario(void* scenario_file_name)
 
         SDL_Rect challenge_feedback_displayer_rect = team_displayer_rect;
         challenge_feedback_displayer_rect.y += 300;
-        game.challenge_feedback_displayer = sui_texture_element_add(&challenge_feedback_displayer_rect, NULL);
+        game.challenge_feedback_displayer = sui_texture_element_add_v1(&challenge_feedback_displayer_rect, NULL);
     }
 
 
@@ -262,7 +262,7 @@ void game_activate_game_over_panel(char* text_message)
     SDL_Rect text_rect = sui_rect_centered(&game.screen_rect, game_over_text_width, game_over_text_height);
     text_rect.y -= 250;
 
-    sui_texture_element_add(&text_rect, game_over_text_texture);
+    sui_texture_element_add_v1(&text_rect, game_over_text_texture);
 
     SDL_Rect button_rect = sui_rect_centered(&game.screen_rect, 300, 100);
     button_rect.y += 250;

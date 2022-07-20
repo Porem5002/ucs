@@ -118,7 +118,7 @@ static void selector_refresh()
         string_t path_of_scenario_to_load = array_ele(&game.selector.file_paths, string_t, i);
         
         sui_button_element_add(&row_rects[i_relative_to_page], game_set_mode_scenario, path_of_scenario_to_load);
-        sui_texture_element_add(&row_rects[i_relative_to_page], assetman_get_asset(assetman_dynamic_id(icon_asset_id)));
+        sui_texture_element_add_v1(&row_rects[i_relative_to_page], assetman_get_asset(assetman_dynamic_id(icon_asset_id)));
 
         SDL_Texture* name_texture = assetman_get_asset(assetman_dynamic_id(name_asset_id));
 
@@ -130,7 +130,7 @@ static void selector_refresh()
 
         text_rect.y += SCENARIO_TEXT_OFFSET;
 
-        sui_texture_element_add(&text_rect, name_texture);
+        sui_texture_element_add_v1(&text_rect, name_texture);
     }
 
     if(!pager_is_first_page(&game.selector.pager))
@@ -140,7 +140,7 @@ static void selector_refresh()
         prev_page_button_rect.y = SCREEN_HEIGHT/2 - 160/2;
 
         sui_button_element_add(&prev_page_button_rect, selector_go_to_prev_page, NULL);
-        sui_texture_element_add(&prev_page_button_rect, assetman_get_asset(assetman_dynamic_id(2)));
+        sui_texture_element_add_v1(&prev_page_button_rect, assetman_get_asset(assetman_dynamic_id(2)));
     }
 
     if(!pager_is_last_page(&game.selector.pager))
@@ -150,7 +150,7 @@ static void selector_refresh()
         next_page_button_rect.y = SCREEN_HEIGHT/2 - 160/2;
 
         sui_button_element_add(&next_page_button_rect, selector_go_to_next_page, NULL);
-        sui_texture_element_add(&next_page_button_rect, assetman_get_asset(assetman_dynamic_id(1)));
+        sui_texture_element_add_v1(&next_page_button_rect, assetman_get_asset(assetman_dynamic_id(1)));
     }
 
     SDL_Color background_color = { 135, 131, 209, 255 };
@@ -194,7 +194,7 @@ static void selector_section_navbar(bool is_standard_section)
     SDL_QueryTexture(selected_section_label, NULL, NULL, &selected_section_label_width, &selected_section_label_height);
     selected_section_label_rect = sui_rect_centered(selected_section_background_rect, selected_section_label_width, selected_section_label_height);
     sui_solid_rect_element_add(selected_section_background_rect, (SDL_Color){ ATTRACTIVE_COLOR_VALS, 255 });
-    sui_texture_element_add(&selected_section_label_rect, selected_section_label);
+    sui_texture_element_add_v1(&selected_section_label_rect, selected_section_label);
 }
 
 static void selector_go_to_next_page(void* event_data)
