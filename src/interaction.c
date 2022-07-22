@@ -162,11 +162,11 @@ static void move_selected_piece_in_challenge_scenario(incomplete_move_info_t inc
 
     if(incomplete_move.source_cell != expected_move.source_cell || incomplete_move.destination_cell != expected_move.destination_cell)
     {
-        game.challenge_feedback_displayer->texture = assetman_get_asset(INCORRECT_MOVE_IMAGE_ID);
+        game.challenge_feedback_displayer->texture = assetman_get_asset("$ChallengeWrong");
         return;
     }
 
-    game.challenge_feedback_displayer->texture = assetman_get_asset(CORRECT_MOVE_IMAGE_ID);
+    game.challenge_feedback_displayer->texture = assetman_get_asset("$ChallengeCorrect");
     
     game.current_challenge_move_index++;
 

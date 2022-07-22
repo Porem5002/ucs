@@ -39,16 +39,16 @@ static void render_piece(cell_value_t piece, int x, int y)
     switch (piece)
     {
         case PIECE_WHITE_PEON:
-            SDL_RenderCopy(game.renderer, assetman_get_asset(WHITE_PEON_TEXTURE_ID), NULL, &piece_rect);
+            SDL_RenderCopy(game.renderer, assetman_get_asset("$WhitePeon"), NULL, &piece_rect);
             break;
         case PIECE_WHITE_QUEEN:
-            SDL_RenderCopy(game.renderer, assetman_get_asset(WHITE_QUEEN_TEXTURE_ID), NULL, &piece_rect);
+            SDL_RenderCopy(game.renderer, assetman_get_asset("$WhiteQueen"), NULL, &piece_rect);
             break;
         case PIECE_BLACK_PEON:
-            SDL_RenderCopy(game.renderer, assetman_get_asset(BLACK_PEON_TEXTURE_ID), NULL, &piece_rect);
+            SDL_RenderCopy(game.renderer, assetman_get_asset("$BlackPeon"), NULL, &piece_rect);
             break;
         case PIECE_BLACK_QUEEN:
-            SDL_RenderCopy(game.renderer, assetman_get_asset(BLACK_QUEEN_TEXTURE_ID), NULL, &piece_rect);
+            SDL_RenderCopy(game.renderer, assetman_get_asset("$BlackQueen"), NULL, &piece_rect);
             break;
     }
 

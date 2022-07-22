@@ -114,8 +114,8 @@ void game_set_mode_menu(void* event_data)
     
     sui_clear_elements();
 
-    TTF_Font* main_font = assetman_get_asset(MAIN_FONT_ID);
-    TTF_Font* title_font = assetman_get_asset(TITLE_FONT_ID);
+    TTF_Font* main_font = assetman_get_asset("$MainFont");
+    TTF_Font* title_font = assetman_get_asset("$TitleFont");
 
     SDL_Color text_color = { MIDDLE_COLOR_VALS, 255};
     SDL_Color button_background_color = { ATTRACTIVE_COLOR_VALS, 255};
@@ -144,10 +144,10 @@ void game_set_mode_menu(void* event_data)
     sui_simple_button_t* editor_button = sui_simple_button_with_text_add(game.renderer, &button_rects[1], main_font, UI_EDITOR_BUTTON_TEXT, game_set_mode_editor, NULL, text_color, button_background_color);
     sui_simple_button_t* quit_button = sui_simple_button_with_text_add(game.renderer, &button_rects[2], main_font, UI_QUIT_BUTTON_TEXT, game_quit, NULL, text_color, button_background_color);
     
-    assetman_set_asset(assetman_dynamic_id(0), TEXTURE_ASSET_TYPE, title_text_texture);
-    assetman_set_asset(assetman_dynamic_id(1), TEXTURE_ASSET_TYPE, start_button->text.as_texture_element.texture);
-    assetman_set_asset(assetman_dynamic_id(2), TEXTURE_ASSET_TYPE, editor_button->text.as_texture_element.texture);
-    assetman_set_asset(assetman_dynamic_id(3), TEXTURE_ASSET_TYPE, quit_button->text.as_texture_element.texture);
+    assetman_set_asset(true, "MenuTitle", TEXTURE_ASSET_TYPE, title_text_texture);
+    assetman_set_asset(true, "MenuStart", TEXTURE_ASSET_TYPE, start_button->text.as_texture_element.texture);
+    assetman_set_asset(true, "MenuEditor", TEXTURE_ASSET_TYPE, editor_button->text.as_texture_element.texture);
+    assetman_set_asset(true, "MenuQuit", TEXTURE_ASSET_TYPE, quit_button->text.as_texture_element.texture);
 
     LOGGER_LOGS("Finished loading Menu!");
 }
@@ -245,7 +245,7 @@ void game_activate_game_over_panel(char* text_message)
 {
     if(game.scenario_game_over_reached) return;
 
-    TTF_Font* main_font = assetman_get_asset(MAIN_FONT_ID);
+    TTF_Font* main_font = assetman_get_asset("$MainFont");
 
     SDL_Rect panel_rect = sui_rect_centered(&game.screen_rect, 900, 700);
 
@@ -271,8 +271,8 @@ void game_activate_game_over_panel(char* text_message)
 
     sui_simple_button_with_texture_add(&button_rect, menu_button_texture, game_set_mode_menu, NULL, (SDL_Color){ ATTRACTIVE_COLOR_VALS, 255 });
 
-    assetman_set_asset(assetman_dynamic_id(0), TEXTURE_ASSET_TYPE, game_over_text_texture);
-    assetman_set_asset(assetman_dynamic_id(1), TEXTURE_ASSET_TYPE, menu_button_texture);
+    assetman_set_asset(true, "GameplayGameOver", TEXTURE_ASSET_TYPE, game_over_text_texture);
+    assetman_set_asset(true, "GameplayMenu", TEXTURE_ASSET_TYPE, menu_button_texture);
 
     game.scenario_game_over_reached = true;
 }

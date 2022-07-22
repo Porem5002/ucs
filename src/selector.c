@@ -1,3 +1,5 @@
+#include <inttypes.h> 
+
 #include "include/game.h"
 #include "include/assetman_setup.h"
 #include "include/scenario_loader.h"
@@ -11,12 +13,6 @@
 #define SCENARIO_ICON_SIDE 250
 #define SCENARIO_TEXT_OFFSET 180
 #define SCENARIO_SPACING 450
-
-#define SELECTED_STANDARD_SECTION_ASSET_ID assetman_dynamic_id(3)
-#define SELECTED_EDITOR_SECTION_ASSET_ID assetman_dynamic_id(4)
-
-#define STANDARD_SECTION_ASSET_ID assetman_dynamic_id(5)
-#define EDITOR_SECTION_ASSET_ID assetman_dynamic_id(6)
 
 static void selector_refresh();
 static void selector_section_navbar(bool is_standard_section);
@@ -36,30 +32,32 @@ void game_set_mode_selector(void* event_data)
 
     sui_clear_elements();
 
-    SDL_Texture* default_scenario_icon = assetman_get_asset(DEFAULT_SCENARIO_ICON_TEXTURE_ID);
-    SDL_Texture* default_scenario_name = assetman_get_asset(DEFAULT_SCENARIO_NAME_TEXTURE_ID);
+    SDL_Texture* default_scenario_icon = assetman_get_asset("$DefaultSchIcon");
+    SDL_Texture* default_scenario_name = assetman_get_asset("$DefaultSchName");
     
-    SDL_Texture* back_button_text_texture = sui_texture_from_text(game.renderer, assetman_get_asset(MAIN_FONT_ID), UI_BACK_BUTTON_TEXT, (SDL_Color){ 0, 0, 0, 255 });
+    SDL_Texture* back_button_text_texture = sui_texture_from_text(game.renderer, assetman_get_asset("$MainFont"), UI_BACK_BUTTON_TEXT, (SDL_Color){ 0, 0, 0, 255 });
     SDL_Texture* next_page_button_texture = sui_load_texture(PATH_IMAGES "next_page.png", game.renderer, NULL);
     SDL_Texture* prev_page_button_texture = sui_load_texture(PATH_IMAGES "prev_page.png", game.renderer, NULL);
 
-    SDL_Texture* selected_standard_section_texture = sui_texture_from_text(game.renderer, assetman_get_asset(MAIN_FONT_ID), "STANDARD", (SDL_Color){ MIDDLE_COLOR_VALS, 255 });
-    SDL_Texture* selected_editor_section_texture = sui_texture_from_text(game.renderer, assetman_get_asset(MAIN_FONT_ID), "EDITOR", (SDL_Color){ MIDDLE_COLOR_VALS, 255 });
+    SDL_Texture* selected_standard_section_texture = sui_texture_from_text(game.renderer, assetman_get_asset("$MainFont"), "STANDARD", (SDL_Color){ MIDDLE_COLOR_VALS, 255 });
+    SDL_Texture* selected_editor_section_texture = sui_texture_from_text(game.renderer, assetman_get_asset("$MainFont"), "EDITOR", (SDL_Color){ MIDDLE_COLOR_VALS, 255 });
 
-    SDL_Texture* standard_section_texture = sui_texture_from_text(game.renderer, assetman_get_asset(MAIN_FONT_ID), "STANDARD", (SDL_Color){ ATTRACTIVE_COLOR_VALS, 255 });
-    SDL_Texture* editor_section_texture = sui_texture_from_text(game.renderer, assetman_get_asset(MAIN_FONT_ID), "EDITOR", (SDL_Color){ ATTRACTIVE_COLOR_VALS, 255 });
+    SDL_Texture* standard_section_texture = sui_texture_from_text(game.renderer, assetman_get_asset("$MainFont"), "STANDARD", (SDL_Color){ ATTRACTIVE_COLOR_VALS, 255 });
+    SDL_Texture* editor_section_texture = sui_texture_from_text(game.renderer, assetman_get_asset("$MainFont"), "EDITOR", (SDL_Color){ ATTRACTIVE_COLOR_VALS, 255 });
 
-    assetman_set_asset(assetman_dynamic_id(0), TEXTURE_ASSET_TYPE, back_button_text_texture);
-    assetman_set_asset(assetman_dynamic_id(1), TEXTURE_ASSET_TYPE, next_page_button_texture);
-    assetman_set_asset(assetman_dynamic_id(2), TEXTURE_ASSET_TYPE, prev_page_button_texture);
+    assetman_set_asset(true, "SelectorBackButton", TEXTURE_ASSET_TYPE, back_button_text_texture);
+    assetman_set_asset(true, "SelectorNextPage", TEXTURE_ASSET_TYPE, next_page_button_texture);
+    assetman_set_asset(true, "SelectorPrevPage", TEXTURE_ASSET_TYPE, prev_page_button_texture);
 
-    assetman_set_asset(SELECTED_STANDARD_SECTION_ASSET_ID, TEXTURE_ASSET_TYPE, selected_standard_section_texture);
-    assetman_set_asset(SELECTED_EDITOR_SECTION_ASSET_ID, TEXTURE_ASSET_TYPE, selected_editor_section_texture);
+    assetman_set_asset(true, "SelectorStdSelected", TEXTURE_ASSET_TYPE, selected_standard_section_texture);
+    assetman_set_asset(true, "SelectorEditorSelected", TEXTURE_ASSET_TYPE, selected_editor_section_texture);
 
-    assetman_set_asset(STANDARD_SECTION_ASSET_ID, TEXTURE_ASSET_TYPE, standard_section_texture);
-    assetman_set_asset(EDITOR_SECTION_ASSET_ID, TEXTURE_ASSET_TYPE, editor_section_texture);
+    assetman_set_asset(true, "SelectorStd", TEXTURE_ASSET_TYPE, standard_section_texture);
+    assetman_set_asset(true, "SelectorEditor", TEXTURE_ASSET_TYPE, editor_section_texture);
 
-    size_t id = ID_ANCHOR;
+    uint8_t num_id = 0;
+    char sch_icon_id [] = "SelectorSchIcon000";
+    char sch_name_id [] = "SelectorSchName000"; 
 
     game.selector.file_paths = get_scenario_paths_from_dir(event_data);
 
@@ -67,20 +65,20 @@ void game_set_mode_selector(void* event_data)
     {
         string_t current_file_path = array_ele(&game.selector.file_paths, string_t, i);
         scenario_info_t given_scenario_info = get_scenario_info_from_file(current_file_path);
-        
+
         if(given_scenario_info.icon_texture != NULL)
-            assetman_set_asset(assetman_dynamic_id(id), TEXTURE_ASSET_TYPE, given_scenario_info.icon_texture);
+            assetman_set_asset(false, sch_icon_id, TEXTURE_ASSET_TYPE, given_scenario_info.icon_texture);
         else
-            assetman_set_asset(assetman_dynamic_id(id), UNHANDLED_ASSET, default_scenario_icon);
-        
-        id++;
+            assetman_set_asset(false, sch_icon_id, UNHANDLED_ASSET, default_scenario_icon);
 
         if(given_scenario_info.name_texture != NULL)
-            assetman_set_asset(assetman_dynamic_id(id), TEXTURE_ASSET_TYPE, given_scenario_info.name_texture);
+            assetman_set_asset(false, sch_name_id, TEXTURE_ASSET_TYPE, given_scenario_info.name_texture);
         else
-            assetman_set_asset(assetman_dynamic_id(id), UNHANDLED_ASSET, default_scenario_name);
+            assetman_set_asset(false, sch_name_id, UNHANDLED_ASSET, default_scenario_name);
 
-        id++;
+        num_id++;
+        sprintf(&sch_icon_id[15], "%03"PRIu8, num_id);
+        sprintf(&sch_name_id[15], "%03"PRIu8, num_id);
     }
 
     pager_init(&game.selector.pager, array_size(&game.selector.file_paths), SELECTOR_ITEMS_PER_PAGE);
@@ -109,18 +107,18 @@ static void selector_refresh()
         sui_rect_row(&row_area_rect, row_rects + SELECTOR_ITEMS_PER_PAGE/2, SELECTOR_ITEMS_PER_PAGE/2, SCENARIO_ICON_SIDE, SCENARIO_ICON_SIDE, 20);
     }
 
+    char sch_icon_id [] = "SelectorSchIcon000";
+    char sch_name_id [] = "SelectorSchName000"; 
+
     for (size_t i = game.selector.pager.current_page_start; i < game.selector.pager.current_page_end; i++)
     {
-        size_t icon_asset_id = i*2 + ID_ANCHOR; 
-        size_t name_asset_id = i*2 + ID_ANCHOR + 1;
-
         size_t i_relative_to_page = game.selector.pager.current_page_end - i - 1;
         string_t path_of_scenario_to_load = array_ele(&game.selector.file_paths, string_t, i);
         
         sui_button_element_add(&row_rects[i_relative_to_page], game_set_mode_scenario, path_of_scenario_to_load);
-        sui_texture_element_add_v1(&row_rects[i_relative_to_page], assetman_get_asset(assetman_dynamic_id(icon_asset_id)));
+        sui_texture_element_add_v1(&row_rects[i_relative_to_page], assetman_get_asset(sch_icon_id));
 
-        SDL_Texture* name_texture = assetman_get_asset(assetman_dynamic_id(name_asset_id));
+        SDL_Texture* name_texture = assetman_get_asset(sch_name_id);
 
         int text_width;
         int text_height;
@@ -131,6 +129,9 @@ static void selector_refresh()
         text_rect.y += SCENARIO_TEXT_OFFSET;
 
         sui_texture_element_add_v1(&text_rect, name_texture);
+
+        sprintf(&sch_icon_id[15], "%03"PRIu8, i);
+        sprintf(&sch_name_id[15], "%03"PRIu8, i);
     }
 
     if(!pager_is_first_page(&game.selector.pager))
@@ -140,7 +141,7 @@ static void selector_refresh()
         prev_page_button_rect.y = SCREEN_HEIGHT/2 - 160/2;
 
         sui_button_element_add(&prev_page_button_rect, selector_go_to_prev_page, NULL);
-        sui_texture_element_add_v1(&prev_page_button_rect, assetman_get_asset(assetman_dynamic_id(2)));
+        sui_texture_element_add_v1(&prev_page_button_rect, assetman_get_asset("SelectorPrevPage"));
     }
 
     if(!pager_is_last_page(&game.selector.pager))
@@ -150,7 +151,7 @@ static void selector_refresh()
         next_page_button_rect.y = SCREEN_HEIGHT/2 - 160/2;
 
         sui_button_element_add(&next_page_button_rect, selector_go_to_next_page, NULL);
-        sui_texture_element_add_v1(&next_page_button_rect, assetman_get_asset(assetman_dynamic_id(1)));
+        sui_texture_element_add_v1(&next_page_button_rect, assetman_get_asset("SelectorNextPage"));
     }
 
     SDL_Color background_color = { 135, 131, 209, 255 };
@@ -158,7 +159,7 @@ static void selector_refresh()
 
     back_button_rect.y = SCREEN_HEIGHT - 80 - 20;
 
-    SDL_Texture* back_button_text_texture = assetman_get_asset(assetman_dynamic_id(0));
+    SDL_Texture* back_button_text_texture = assetman_get_asset("SelectorBackButton");
     
     sui_simple_button_with_texture_add(&back_button_rect, back_button_text_texture, game_set_mode_menu, NULL, background_color);
 }
@@ -176,14 +177,14 @@ static void selector_section_navbar(bool is_standard_section)
 
     if(is_standard_section)
     {
-        sui_simple_button_with_texture_add(&section_rects[1], assetman_get_asset(EDITOR_SECTION_ASSET_ID), game_set_mode_selector, GSELECTOR_EDITOR, (SDL_Color){ MIDDLE_COLOR_VALS, 255 });
-        selected_section_label = assetman_get_asset(SELECTED_STANDARD_SECTION_ASSET_ID);
+        sui_simple_button_with_texture_add(&section_rects[1], assetman_get_asset("SelectorEditor"), game_set_mode_selector, GSELECTOR_EDITOR, (SDL_Color){ MIDDLE_COLOR_VALS, 255 });
+        selected_section_label = assetman_get_asset("SelectorStdSelected");
         selected_section_background_rect = &section_rects[0];
     }
     else
     {
-        sui_simple_button_with_texture_add(&section_rects[0], assetman_get_asset(STANDARD_SECTION_ASSET_ID), game_set_mode_selector, GSELECTOR_STANDARD, (SDL_Color){ MIDDLE_COLOR_VALS, 255 });
-        selected_section_label = assetman_get_asset(SELECTED_EDITOR_SECTION_ASSET_ID);
+        sui_simple_button_with_texture_add(&section_rects[0], assetman_get_asset("SelectorStd"), game_set_mode_selector, GSELECTOR_STANDARD, (SDL_Color){ MIDDLE_COLOR_VALS, 255 });
+        selected_section_label = assetman_get_asset("SelectorEditorSelected");
         selected_section_background_rect = &section_rects[1];
     }
     

@@ -24,18 +24,18 @@ void setup_initial_assets(SDL_Renderer* renderer)
     SDL_Texture* default_scenario_icon_texture = sui_load_texture(PATH_IMAGES "default_scenario_icon.png", renderer, NULL);
     SDL_Texture* default_scenario_name_texture = sui_texture_from_text(renderer, browser_font, "???", (SDL_Color){ ATTRACTIVE_COLOR_VALS , 255});
 
-    assetman_set_asset(MAIN_FONT_ID, FONT_ASSET_TYPE, main_font);
-    assetman_set_asset(TITLE_FONT_ID, FONT_ASSET_TYPE, title_font);
-    assetman_set_asset(BROWSER_FONT_ID, FONT_ASSET_TYPE, browser_font);
-    assetman_set_asset(WHITE_PEON_TEXTURE_ID, TEXTURE_ASSET_TYPE, white_peon_texture);
-    assetman_set_asset(WHITE_QUEEN_TEXTURE_ID, TEXTURE_ASSET_TYPE, white_queen_texture);
-    assetman_set_asset(BLACK_PEON_TEXTURE_ID, TEXTURE_ASSET_TYPE, black_peon_texture);
-    assetman_set_asset(BLACK_QUEEN_TEXTURE_ID, TEXTURE_ASSET_TYPE, black_queen_texture);
-    assetman_set_asset(CORRECT_MOVE_IMAGE_ID, TEXTURE_ASSET_TYPE, correct_move_texture);
-    assetman_set_asset(INCORRECT_MOVE_IMAGE_ID, TEXTURE_ASSET_TYPE, incorrect_move_texture);
-    assetman_set_asset(REMOVE_PIECE_IMAGE_ID, TEXTURE_ASSET_TYPE, remove_piece_texture);
-    assetman_set_asset(DEFAULT_SCENARIO_ICON_TEXTURE_ID, TEXTURE_ASSET_TYPE, default_scenario_icon_texture);
-    assetman_set_asset(DEFAULT_SCENARIO_NAME_TEXTURE_ID, TEXTURE_ASSET_TYPE, default_scenario_name_texture);
+    assetman_set_asset(true, "$MainFont", FONT_ASSET_TYPE, main_font);
+    assetman_set_asset(true, "$TitleFont", FONT_ASSET_TYPE, title_font);
+    assetman_set_asset(true, "$SelectorFont", FONT_ASSET_TYPE, browser_font);
+    assetman_set_asset(true, "$WhitePeon", TEXTURE_ASSET_TYPE, white_peon_texture);
+    assetman_set_asset(true, "$WhiteQueen", TEXTURE_ASSET_TYPE, white_queen_texture);
+    assetman_set_asset(true, "$BlackPeon", TEXTURE_ASSET_TYPE, black_peon_texture);
+    assetman_set_asset(true, "$BlackQueen", TEXTURE_ASSET_TYPE, black_queen_texture);
+    assetman_set_asset(true, "$ChallengeCorrect", TEXTURE_ASSET_TYPE, correct_move_texture);
+    assetman_set_asset(true, "$ChallengeWrong", TEXTURE_ASSET_TYPE, incorrect_move_texture);
+    assetman_set_asset(true, "$EditorRemovePiece", TEXTURE_ASSET_TYPE, remove_piece_texture);
+    assetman_set_asset(true, "$DefaultSchIcon", TEXTURE_ASSET_TYPE, default_scenario_icon_texture);
+    assetman_set_asset(true, "$DefaultSchName", TEXTURE_ASSET_TYPE, default_scenario_name_texture);
 }
 
 void checkers_free_asset_function(asset_info_t* asset)
