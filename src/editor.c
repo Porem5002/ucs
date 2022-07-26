@@ -1,3 +1,4 @@
+#include <time.h>
 #include <inttypes.h>
 
 #include "include/game.h"
@@ -5,6 +6,11 @@
 #include "include/scenario_loader.h"
 #include "include/editor.h"
 #include "include/rendering.h"
+#include "include/strplus.h"
+
+/* 20 digits + ".sch" + '\0' */
+#define SAVE_FILE_NAME_CHAR_COUNT 25
+#define SAVE_FILE_PATH_CHAR_COUNT (sizeof(PATH_SCENARIOS_EDITOR) + SAVE_FILE_NAME_CHAR_COUNT - 1)
 
 static void editor_section_navbar(uint8_t selected_section);
 static void editor_set_main_section(void* event_data);
@@ -30,6 +36,7 @@ static string_t scenario_mode_to_str(uint8_t mode);
 static string_t boolean_to_str(bool boolean);
 static string_t team_to_str(team_t team);
 static string_t peon_movement_to_str(bool is_white_peon_forward_top_to_bottom);
+static void generate_save_file_path(char* dest);
 
 void game_set_mode_editor(void* event_data)
 {
@@ -113,8 +120,12 @@ void game_set_mode_editor(void* event_data)
 void save_scenario_as_sch_file(void* event_data)
 {
     scenario_t* scenario = event_data;
+    char file_path [SAVE_FILE_PATH_CHAR_COUNT];
+    FILE* f;
 
-    FILE* f = fopen(PATH_SCENARIOS_EDITOR "editor.sch", "wb");
+    generate_save_file_path(file_path);
+
+    f = fopen(file_path, "wb");
 
     if(f == NULL) exit(EXIT_FAILURE);
 
@@ -439,4 +450,16 @@ static string_t team_to_str(team_t team)
 static string_t peon_movement_to_str(bool is_white_peon_forward_top_to_bottom)
 {
     return is_white_peon_forward_top_to_bottom ? "WHITE_TOP_TO_BOTTOM" : "WHITE_BOTTOM_TO_TOP";
+}
+
+static void generate_save_file_path(char* dest)
+{
+    time_t curr_time = time(NULL);
+
+    // _findfirst and _findnext seem to get files in reverse alphabetical order
+    // by turning smaller time values into larger ones and vice versa 
+    // the selector window will load the files in alphabetical order 
+    uint64_t file_id = UINT64_MAX - (uint64_t)curr_time;
+
+    sprintf(dest, PATH_SCENARIOS_EDITOR "%020"PRIu64".sch", file_id);
 }
