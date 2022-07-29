@@ -107,8 +107,12 @@ static void selector_refresh()
         sui_rect_row(&row_area_rect, row_rects + SELECTOR_ITEMS_PER_PAGE/2, SELECTOR_ITEMS_PER_PAGE/2, SCENARIO_ICON_SIDE, SCENARIO_ICON_SIDE, 20);
     }
 
+    uint8_t num_id = (uint8_t)game.selector.pager.current_page_start;
     char sch_icon_id [] = "SelectorSchIcon000";
-    char sch_name_id [] = "SelectorSchName000"; 
+    char sch_name_id [] = "SelectorSchName000";
+
+    sprintf(&sch_icon_id[15], "%03"PRIu8, num_id);
+    sprintf(&sch_name_id[15], "%03"PRIu8, num_id);
 
     for (size_t i = game.selector.pager.current_page_start; i < game.selector.pager.current_page_end; i++)
     {
@@ -130,8 +134,9 @@ static void selector_refresh()
 
         sui_texture_element_add_v1(&text_rect, name_texture);
 
-        sprintf(&sch_icon_id[15], "%03"PRIu8, (uint8_t)i);
-        sprintf(&sch_name_id[15], "%03"PRIu8, (uint8_t)i);
+        num_id++;
+        sprintf(&sch_icon_id[15], "%03"PRIu8, num_id);
+        sprintf(&sch_name_id[15], "%03"PRIu8, num_id);
     }
 
     if(!pager_is_first_page(&game.selector.pager))
