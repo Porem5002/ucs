@@ -225,8 +225,13 @@ static void editor_set_main_section(void* event_data)
     board_size_button->button_trigger.as_button_element.event_data = &board_size_button->text.as_texture_element;
     double_corner_side_button->button_trigger.as_button_element.event_data = &double_corner_side_button->text.as_texture_element;
 
-    sui_texture_element_add_v2(button_row1_rects[0].x, button_row1_rects[0].y - 75, assetman_get_asset("EditorFieldBoard"));
-    sui_texture_element_add_v2(button_row1_rects[1].x, button_row1_rects[1].y - 75, assetman_get_asset("EditorFieldDCorner"));
+    int widthA, widthB;
+
+    SDL_QueryTexture(assetman_get_asset("EditorFieldBoard"), NULL, NULL, &widthA, NULL);
+    SDL_QueryTexture(assetman_get_asset("EditorFieldDCorner"), NULL, NULL, &widthB, NULL);
+
+    sui_texture_element_add_v2(sui_rect_center_x(&button_row1_rects[0], widthA), button_row1_rects[0].y - 75, assetman_get_asset("EditorFieldBoard"));
+    sui_texture_element_add_v2(sui_rect_center_x(&button_row1_rects[1], widthB), button_row1_rects[1].y - 75, assetman_get_asset("EditorFieldDCorner"));
 }
 
 static void editor_set_rules_section(void* event_data)
@@ -262,10 +267,17 @@ static void editor_set_rules_section(void* event_data)
     law_quantity_button->button_trigger.as_button_element.event_data = &law_quantity_button->text.as_texture_element;
     law_quality_button->button_trigger.as_button_element.event_data = &law_quality_button->text.as_texture_element;
 
-    sui_texture_element_add_v2(rule_buttons_rects[0].x - 400, rule_buttons_rects[0].y, assetman_get_asset("EditorFieldInitPlayer"));
-    sui_texture_element_add_v2(rule_buttons_rects[1].x - 400, rule_buttons_rects[1].y, assetman_get_asset("EditorFieldFlyingKings"));
-    sui_texture_element_add_v2(rule_buttons_rects[2].x - 400, rule_buttons_rects[2].y, assetman_get_asset("EditorFieldQuantityLaw"));
-    sui_texture_element_add_v2(rule_buttons_rects[3].x - 400, rule_buttons_rects[3].y, assetman_get_asset("EditorFieldQualityLaw"));
+    int heightA, heightB, heightC, heightD;
+
+    SDL_QueryTexture(assetman_get_asset("EditorFieldInitPlayer"), NULL, NULL, NULL, &heightA);
+    SDL_QueryTexture(assetman_get_asset("EditorFieldFlyingKings"), NULL, NULL, NULL, &heightB);
+    SDL_QueryTexture(assetman_get_asset("EditorFieldQuantityLaw"), NULL, NULL, NULL, &heightC);
+    SDL_QueryTexture(assetman_get_asset("EditorFieldQualityLaw"), NULL, NULL, NULL, &heightD);
+
+    sui_texture_element_add_v2(rule_buttons_rects[0].x - 400, sui_rect_center_y(&rule_buttons_rects[0], heightA), assetman_get_asset("EditorFieldInitPlayer"));
+    sui_texture_element_add_v2(rule_buttons_rects[1].x - 400, sui_rect_center_y(&rule_buttons_rects[1], heightB), assetman_get_asset("EditorFieldFlyingKings"));
+    sui_texture_element_add_v2(rule_buttons_rects[2].x - 400, sui_rect_center_y(&rule_buttons_rects[2], heightC), assetman_get_asset("EditorFieldQuantityLaw"));
+    sui_texture_element_add_v2(rule_buttons_rects[3].x - 400, sui_rect_center_y(&rule_buttons_rects[3], heightD), assetman_get_asset("EditorFieldQualityLaw"));
 }
 
 static void editor_set_pieces_section(void* event_data)
