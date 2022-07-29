@@ -37,7 +37,7 @@ static assetman_table_t assetman_table_init();
 static void assetman_table_set(assetman_table_t* table, bool is_safe_key, const char* key, asset_info_t value);
 static void* assetman_table_get(assetman_table_t* table, const char* key);
 static void assetman_table_clear(assetman_table_t* table, free_asset_function asset_cleanup_function);
-static size_t assetman_table_hash(const char* key);
+static size_t assetman_table_hash(const void* key);
 
 bool assetman_init(free_asset_function custom_free_asset_function)
 {
@@ -182,13 +182,13 @@ static void assetman_table_clear(assetman_table_t* table, free_asset_function as
     *table = assetman_table_init();
 }
 
-static size_t assetman_table_hash(const char* key)
+static size_t assetman_table_hash(const void* key)
 {
     const unsigned char* str = key;
     size_t hash = 5381;
     int c;
 
-    while (c = *key++) 
+    while ((c = *str++)) 
         hash = ((hash << 5) + hash) + c;
 
     return hash;

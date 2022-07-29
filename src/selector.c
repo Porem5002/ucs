@@ -130,8 +130,8 @@ static void selector_refresh()
 
         sui_texture_element_add_v1(&text_rect, name_texture);
 
-        sprintf(&sch_icon_id[15], "%03"PRIu8, i);
-        sprintf(&sch_name_id[15], "%03"PRIu8, i);
+        sprintf(&sch_icon_id[15], "%03"PRIu8, (uint8_t)i);
+        sprintf(&sch_name_id[15], "%03"PRIu8, (uint8_t)i);
     }
 
     if(!pager_is_first_page(&game.selector.pager))
