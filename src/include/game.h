@@ -112,9 +112,11 @@ typedef struct
     SDL_Window* window;
     SDL_Renderer* renderer;
 
+    string_t text_input_field;
     game_input_t input;
 
     void (*update) ();
+    void (*on_text_input_field_changed) ();
 
     union
     {
@@ -159,6 +161,7 @@ typedef struct
     float delta_time;
 
     bool is_playing;
+    bool is_text_input_field_active;
     uint8_t mode;
 } game_t;
 
@@ -184,5 +187,11 @@ void game_check_for_and_activate_victory();
 void game_activate_game_over_panel(char* text_message);
 
 void scenario_set_default(scenario_t* scenario);
+
+void game_text_input_field_start();
+void game_text_input_field_stop();
+void game_text_input_field_receive(string_t);
+void game_text_input_field_back();
+void game_text_input_field_clear();
 
 #endif

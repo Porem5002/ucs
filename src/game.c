@@ -100,6 +100,9 @@ void game_catch_input(const SDL_Event* event)
     {
         game.input.type = GAME_INPUT_KEY_DOWN;
         game.input.key_pressed = event->key.keysym.sym;
+
+        if(game.is_text_input_field_active && event->key.keysym.sym == SDLK_BACKSPACE)
+            game_text_input_field_back();
     }
 }
 
@@ -279,6 +282,9 @@ void game_activate_game_over_panel(char* text_message)
 
 void game_free_dependencies()
 {
+    game_text_input_field_stop();
+    game_text_input_field_clear();
+    
     switch (game.mode)
     {
         case MODE_MENU:
@@ -319,4 +325,53 @@ void scenario_set_default(scenario_t* scenario)
     scenario->applies_law_of_quality = false;
     scenario->double_corner_on_right = true;
     memset(scenario->board.playable_cells, NO_PIECE, MAX_BOARD_PLAYABLE_CELL_COUNT);
+}
+
+void game_text_input_field_start()
+{
+    game.is_text_input_field_active = true;
+    SDL_StartTextInput();
+}
+
+void game_text_input_field_stop()
+{
+    game.is_text_input_field_active = false;
+    SDL_StopTextInput();
+}
+
+void game_text_input_field_receive(string_t received_text)
+{
+    if(game.text_input_field == NULL)
+    {
+        game.text_input_field = string_heap_copy(received_text);
+    }
+    else
+    {
+        string_t prev_text = game.text_input_field;
+        game.text_input_field = string_heap_concat(prev_text, received_text);
+        free(prev_text);
+    }
+
+    if(game.on_text_input_field_changed != NULL)
+        game.on_text_input_field_changed();
+}
+
+void game_text_input_field_back()
+{
+    if(game.text_input_field == NULL) return;
+
+    size_t length = string_length(game.text_input_field);
+    
+    if(length == 0) return;
+
+    game.text_input_field[length-1] = '\0';
+    
+    if(game.on_text_input_field_changed != NULL)
+        game.on_text_input_field_changed();
+}
+
+void game_text_input_field_clear()
+{
+    free(game.text_input_field);
+    game.text_input_field = NULL;
 }

@@ -61,6 +61,9 @@ int main(int argc, char** argv)
     game.is_playing = true;
     game.input.mouseX = 0;
     game.input.mouseY = 0;
+    game.is_text_input_field_active = false;
+    game.text_input_field = NULL;
+    game.on_text_input_field_changed = NULL;
     
     game_set_mode_menu(NULL);
 
@@ -83,6 +86,9 @@ int main(int argc, char** argv)
                 case SDL_MOUSEBUTTONDOWN:
                 case SDL_KEYDOWN:
                     game_catch_input(&event);
+                    break;
+                case SDL_TEXTINPUT:
+                    game_text_input_field_receive(event.text.text);
                     break;
                 case SDL_QUIT: 
                     game_quit(NULL);

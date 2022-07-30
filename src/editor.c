@@ -36,12 +36,18 @@ static string_t scenario_mode_to_str(uint8_t mode);
 static string_t boolean_to_str(bool boolean);
 static string_t team_to_str(team_t team);
 static string_t peon_movement_to_str(bool is_white_peon_forward_top_to_bottom);
+static void toggle_text_input_field(void* event_data);
+static void update_sch_name_texture();
 static void generate_save_file_path(char* dest);
+
+/* Points to a sui_texture_t only when the main section is active, otherwise points to NULL */
+static sui_texture_t* sch_name_texture_element = NULL;
 
 void game_set_mode_editor(void* event_data)
 {
     LOGGER_LOGS("Started loading Editor!");
 
+    sch_name_texture_element = NULL;
     game_free_dependencies();
     sui_clear_elements();
 
@@ -49,6 +55,7 @@ void game_set_mode_editor(void* event_data)
 
     game.mode = MODE_EDITOR;
     game.update = game_update_editor;
+    game.on_text_input_field_changed = update_sch_name_texture;
 
     scenario_set_default(&game.scenario_data);
 
@@ -130,7 +137,10 @@ void save_scenario_as_sch_file(void* event_data)
     if(f == NULL) exit(EXIT_FAILURE);
 
     fprintf(f, "SCENARIO_TYPE : %s\n", scenario_mode_to_str(scenario->scenario_mode));
-
+    
+    if(game.text_input_field != NULL)
+        fprintf(f, "NAME:\"%s\"\n", game.text_input_field);
+    
     fprintf(f, "TEAM : %s\n", team_to_str(scenario->team));
     fprintf(f, "BOARD : %"PRId16"\n", scenario->board_side_size);
     fprintf(f, "FLYING_KINGS : %s\n", boolean_to_str(scenario->flying_kings));
@@ -194,7 +204,10 @@ static void editor_section_navbar(uint8_t selected_section)
 }
 
 static void editor_set_main_section(void* event_data)
-{
+{ 
+    game_text_input_field_stop();
+    sch_name_texture_element = NULL;
+
     sui_clear_elements();
 
     sui_solid_rect_element_add(&game.screen_scenario_ui_rect, (SDL_Color){ MIDDLE_COLOR_VALS, 255 });
@@ -232,10 +245,20 @@ static void editor_set_main_section(void* event_data)
 
     sui_texture_element_add_v2(sui_rect_center_x(&button_row1_rects[0], widthA), button_row1_rects[0].y - 75, assetman_get_asset("EditorFieldBoard"));
     sui_texture_element_add_v2(sui_rect_center_x(&button_row1_rects[1], widthB), button_row1_rects[1].y - 75, assetman_get_asset("EditorFieldDCorner"));
+
+    SDL_Rect sch_name_field_rect = sui_rect_centered(&game.screen_scenario_ui_rect, 350, 100);
+    sch_name_field_rect.y -= 250;
+
+    sui_button_element_add(&sch_name_field_rect, toggle_text_input_field, NULL);
+    sui_solid_rect_element_add(&sch_name_field_rect, (SDL_Color){ 255, 255, 255, 255 });
+    sch_name_texture_element = sui_texture_element_add_v2(sch_name_field_rect.x, sch_name_field_rect.y, assetman_get_asset("CurrSchName"));
 }
 
 static void editor_set_rules_section(void* event_data)
 {
+    game_text_input_field_stop();
+    sch_name_texture_element = NULL;
+
     sui_clear_elements();
 
     sui_solid_rect_element_add(&game.screen_scenario_ui_rect, (SDL_Color){ MIDDLE_COLOR_VALS, 255 });
@@ -282,6 +305,9 @@ static void editor_set_rules_section(void* event_data)
 
 static void editor_set_pieces_section(void* event_data)
 {
+    game_text_input_field_stop();
+    sch_name_texture_element = NULL;
+
     sui_clear_elements();
 
     sui_solid_rect_element_add(&game.screen_scenario_ui_rect, (SDL_Color){ MIDDLE_COLOR_VALS, 255 });
@@ -462,6 +488,35 @@ static string_t team_to_str(team_t team)
 static string_t peon_movement_to_str(bool is_white_peon_forward_top_to_bottom)
 {
     return is_white_peon_forward_top_to_bottom ? "WHITE_TOP_TO_BOTTOM" : "WHITE_BOTTOM_TO_TOP";
+}
+
+static void toggle_text_input_field(void* event_data)
+{
+    if(game.is_text_input_field_active)
+    {
+        game_text_input_field_stop();
+        printf("Text Input Field: %s\n", game.text_input_field);
+        return;
+    }
+
+    game_text_input_field_start();
+}
+
+static void update_sch_name_texture()
+{
+    if(sch_name_texture_element == NULL) return;
+
+    SDL_Texture* sch_name_texture = sui_texture_from_utf8_text(game.renderer, assetman_get_asset("$SelectorFont"), game.text_input_field, (SDL_Color){0,0,0,255});
+    SDL_Rect new_rect = sch_name_texture_element->element.rect;
+
+    SDL_QueryTexture(sch_name_texture, NULL, NULL, &new_rect.w, &new_rect.h);
+    sch_name_texture_element->element.rect = new_rect;
+    sch_name_texture_element->texture = sch_name_texture;
+    
+    if(assetman_get_asset("CurrSchName") != NULL)
+        SDL_DestroyTexture(assetman_get_asset("CurrSchName"));
+    
+    assetman_set_asset(true, "CurrSchName", TEXTURE_ASSET_TYPE, sch_name_texture);
 }
 
 static void generate_save_file_path(char* dest)
