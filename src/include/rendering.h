@@ -26,4 +26,6 @@
 
 void render_frame();
 
+void render_only_board();
+
 #endif

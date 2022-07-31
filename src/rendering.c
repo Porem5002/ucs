@@ -3,6 +3,8 @@
 #include "include/sui.h"
 
 static void render_piece(cell_value_t piece, int x, int y);
+static void render_board(board_t* board);
+static void render_board_pieces(board_t* board);
 static void render_cell(cell_id_t cell, Uint8 r, Uint8 g, Uint8 b);
 static void render_frame_scenario();
 static void render_frame_editor();
@@ -26,6 +28,12 @@ void render_frame()
         default:
             break;
     }
+}
+
+void render_only_board()
+{
+    render_board(&game.scenario_data.board);
+    render_board_pieces(&game.scenario_data.board);
 }
 
 static void render_piece(cell_value_t piece, int x, int y)

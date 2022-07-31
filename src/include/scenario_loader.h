@@ -13,11 +13,12 @@
 
 #include "dtstructs.h"
 
-#define PATH_FONTS               "fonts/"
-#define PATH_IMAGES              "images/"
-#define PATH_SCENARIOS_STANDARD  "scenarios/standard/"
-#define PATH_SCENARIOS_EDITOR    "scenarios/editor/"
-#define SCENARIO_FILE_EXTENSION   ".sch"
+#define PATH_FONTS                  "fonts/"
+#define PATH_IMAGES                 "images/"
+#define PATH_ICONS_EDITOR           "images/icons/editor/"
+#define PATH_SCENARIOS_STANDARD     "scenarios/standard/"
+#define PATH_SCENARIOS_EDITOR       "scenarios/editor/"
+#define SCENARIO_FILE_EXTENSION     ".sch"
 
 typedef struct 
 {

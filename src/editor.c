@@ -9,8 +9,14 @@
 #include "include/strplus.h"
 
 /* 20 digits + ".sch" + '\0' */
-#define SAVE_FILE_NAME_CHAR_COUNT 25
-#define SAVE_FILE_PATH_CHAR_COUNT (sizeof(PATH_SCENARIOS_EDITOR) + SAVE_FILE_NAME_CHAR_COUNT - 1)
+#define SCH_FILE_NAME_CHAR_COUNT 25
+#define SCH_FILE_PATH_CHAR_COUNT (sizeof(PATH_SCENARIOS_EDITOR) + SCH_FILE_NAME_CHAR_COUNT - 1)
+
+#define SCH_ICON_NAME_CHAR_COUNT 25
+#define SCH_ICON_PATH_CHAR_COUNT (sizeof(PATH_ICONS_EDITOR) + SCH_ICON_NAME_CHAR_COUNT - 1)
+
+typedef char sch_editor_file_path_t [SCH_FILE_PATH_CHAR_COUNT];
+typedef char sch_editor_icon_path_t [SCH_ICON_PATH_CHAR_COUNT];
 
 static void editor_section_navbar(uint8_t selected_section);
 static void editor_set_main_section(void* event_data);
@@ -38,7 +44,8 @@ static string_t team_to_str(team_t team);
 static string_t peon_movement_to_str(bool is_white_peon_forward_top_to_bottom);
 static void toggle_text_input_field(void* event_data);
 static void update_sch_name_texture();
-static void generate_save_file_path(char* dest);
+static void save_scenario_icon(char* save_path);
+static void generate_save_paths(sch_editor_file_path_t* sch_file_path, sch_editor_icon_path_t* icon_file_path);
 
 /* Points to a sui_texture_t only when the main section is active, otherwise points to NULL */
 static sui_texture_t* sch_name_texture_element = NULL;
@@ -127,10 +134,12 @@ void game_set_mode_editor(void* event_data)
 void save_scenario_as_sch_file(void* event_data)
 {
     scenario_t* scenario = event_data;
-    char file_path [SAVE_FILE_PATH_CHAR_COUNT];
+    sch_editor_file_path_t file_path;
+    sch_editor_icon_path_t icon_path;
     FILE* f;
 
-    generate_save_file_path(file_path);
+    generate_save_paths(&file_path, &icon_path);
+    save_scenario_icon(icon_path);
 
     f = fopen(file_path, "wb");
 
@@ -140,6 +149,8 @@ void save_scenario_as_sch_file(void* event_data)
     
     if(game.text_input_field != NULL)
         fprintf(f, "NAME:\"%s\"\n", game.text_input_field);
+
+    fprintf(f, "ICON:\"%s\"\n", icon_path);
     
     fprintf(f, "TEAM : %s\n", team_to_str(scenario->team));
     fprintf(f, "BOARD : %"PRId16"\n", scenario->board_side_size);
@@ -518,11 +529,34 @@ static void update_sch_name_texture()
     assetman_set_asset(true, "CurrSchName", TEXTURE_ASSET_TYPE, sch_name_texture);
 }
 
-static void generate_save_file_path(char* dest)
+static void save_scenario_icon(char* save_path)
+{
+    SDL_Texture* og_target = SDL_GetRenderTarget(game.renderer);
+    SDL_Texture* icon_texture = SDL_CreateTexture(game.renderer, SDL_GetWindowPixelFormat(game.window), SDL_TEXTUREACCESS_TARGET, game.screen_scenario_board_rect.w, game.screen_scenario_board_rect.h);
+
+    SDL_SetRenderTarget(game.renderer, icon_texture);
+
+    SDL_SetRenderDrawColor(game.renderer, 0, 0, 0, 255);
+    SDL_RenderClear(game.renderer);
+    render_only_board();
+    SDL_RenderPresent(game.renderer);
+
+    SDL_Surface* icon_surface = SDL_CreateRGBSurface(0, game.screen_scenario_board_rect.w, game.screen_scenario_board_rect.h, 32, 0, 0, 0, 0);
+    SDL_RenderReadPixels(game.renderer, NULL, icon_surface->format->format, icon_surface->pixels, icon_surface->pitch);
+
+    IMG_SavePNG(icon_surface, save_path);
+    SDL_SetRenderTarget(game.renderer, og_target);
+
+    SDL_DestroyTexture(icon_texture);
+    SDL_FreeSurface(icon_surface);
+}
+
+static void generate_save_paths(sch_editor_file_path_t* sch_file_path, sch_editor_icon_path_t* icon_file_path)
 {
     // Generate file_id based on time to garantee that the name of the file is always unique for this machine
     time_t curr_time = time(NULL);
     uint64_t file_id = curr_time;
 
-    sprintf(dest, PATH_SCENARIOS_EDITOR "%020"PRIu64".sch", file_id);
+    sprintf(*sch_file_path, PATH_SCENARIOS_EDITOR "%020"PRIu64".sch", file_id);
+    sprintf(*icon_file_path, PATH_ICONS_EDITOR "%020"PRIu64".png", file_id);
 }
