@@ -495,7 +495,6 @@ static void toggle_text_input_field(void* event_data)
     if(game.is_text_input_field_active)
     {
         game_text_input_field_stop();
-        printf("Text Input Field: %s\n", game.text_input_field);
         return;
     }
 
@@ -521,12 +520,9 @@ static void update_sch_name_texture()
 
 static void generate_save_file_path(char* dest)
 {
+    // Generate file_id based on time to garantee that the name of the file is always unique for this machine
     time_t curr_time = time(NULL);
-
-    // _findfirst and _findnext seem to get files in reverse alphabetical order
-    // by turning smaller time values into larger ones and vice versa 
-    // the selector window will load the files in alphabetical order 
-    uint64_t file_id = UINT64_MAX - (uint64_t)curr_time;
+    uint64_t file_id = curr_time;
 
     sprintf(dest, PATH_SCENARIOS_EDITOR "%020"PRIu64".sch", file_id);
 }

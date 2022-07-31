@@ -116,9 +116,10 @@ static void selector_refresh()
 
     for (size_t i = game.selector.pager.current_page_start; i < game.selector.pager.current_page_end; i++)
     {
-        size_t i_relative_to_page = game.selector.pager.current_page_end - i - 1;
+        // Index relative to the Page will always be between 0 and game.selector.pager.max_elements_per_page - 1
+        size_t i_relative_to_page = i - game.selector.pager.current_page_start;
         string_t path_of_scenario_to_load = array_ele(&game.selector.file_paths, string_t, i);
-        
+
         sui_button_element_add(&row_rects[i_relative_to_page], game_set_mode_scenario, path_of_scenario_to_load);
         sui_texture_element_add_v1(&row_rects[i_relative_to_page], assetman_get_asset(sch_icon_id));
 
