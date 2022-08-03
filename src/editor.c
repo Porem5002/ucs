@@ -4,7 +4,6 @@
 #include "include/game.h"
 #include "include/assetman_setup.h"
 #include "include/scenario_loader.h"
-#include "include/editor.h"
 #include "include/rendering.h"
 #include "include/strplus.h"
 
@@ -17,6 +16,8 @@
 
 typedef char sch_editor_file_path_t [SCH_FILE_PATH_CHAR_COUNT];
 typedef char sch_editor_icon_path_t [SCH_ICON_PATH_CHAR_COUNT];
+
+static void save_scenario_as_sch_file(void* event_data);
 
 static void editor_section_navbar(uint8_t selected_section);
 static void editor_set_main_section(void* event_data);
@@ -131,7 +132,7 @@ void game_set_mode_editor(void* event_data)
     LOGGER_LOGS("Finished loading Editor!");
 }
 
-void save_scenario_as_sch_file(void* event_data)
+static void save_scenario_as_sch_file(void* event_data)
 {
     scenario_t* scenario = event_data;
     sch_editor_file_path_t file_path;

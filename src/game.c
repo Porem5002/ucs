@@ -7,7 +7,6 @@
 #include "include/assetman_setup.h"
 #include "include/sui.h"
 #include "include/game.h"
-#include "include/editor.h"
 #include "include/scenario_loader.h"
 #include "include/rendering.h"
 

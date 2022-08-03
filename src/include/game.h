@@ -9,7 +9,6 @@
 #include "pager.h"
 #include "strplus.h"
 #include "logger.h"
-#include "static_text.h"
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_image.h"
 #include "SDL2/SDL_ttf.h"
@@ -19,6 +18,57 @@
 #define DTS_USE_TREE
 
 #include "dtstructs.h"
+
+/* LOG and UI text */
+
+#define PT_MENUS 1
+
+#define LOG_MESSAGE_CHALLENGE_COMPLETED "Challenge Completed"
+#define LOG_MESSAGE_BLACK_TEAM_WON      "Black Team Won"
+#define LOG_MESSAGE_WHITE_TEAM_WON      "White Team Won"
+
+#if PT_MENUS == 1
+#define UI_MESSAGE_CHALLENGE_COMPLETED  "Desafio Concluido"
+#define UI_MESSAGE_BLACK_TEAM_WON       "Negras Venceram"
+#define UI_MESSAGE_WHITE_TEAM_WON       "Brancas Venceram"
+
+#define UI_START_BUTTON_TEXT "JOGAR"
+#define UI_EDITOR_BUTTON_TEXT "EDITOR"
+#define UI_QUIT_BUTTON_TEXT "SAIR"
+#define UI_BACK_BUTTON_TEXT "VOLTAR"
+
+#else
+#define UI_MESSAGE_CHALLENGE_COMPLETED  LOG_MESSAGE_CHALLENGE_COMPLETED
+#define UI_MESSAGE_BLACK_TEAM_WON       LOG_MESSAGE_BLACK_TEAM_WON
+#define UI_MESSAGE_WHITE_TEAM_WON       LOG_MESSAGE_WHITE_TEAM_WON
+
+#define UI_START_BUTTON_TEXT "START"
+#define UI_EDITOR_BUTTON_TEXT "EDITOR"
+#define UI_QUIT_BUTTON_TEXT "QUIT"
+#define UI_BACK_BUTTON_TEXT "BACK"
+
+#endif
+
+/* RGB COLORS */
+
+#define BACKGROUND_COLOR_VALS 50, 50, 50
+#define ATTRACTIVE_COLOR_VALS 135, 131, 209
+#define MIDDLE_COLOR_VALS 0, 0, 0
+#define COMMON_COLOR_VALS 50, 50, 50
+
+#define BLACK_CELLS_COLOR_VALS 118, 65, 52
+#define WHITE_CELLS_COLOR_VALS 170, 143, 102
+
+#define BLACK_PIECE_COLOR_VALS 0, 0, 0
+#define WHITE_PIECE_COLOR_VALS 255, 255, 255
+
+#define SELECTED_CELL_COLOR_VALS 165, 180, 82
+#define HOVERED_CELL_COLOR_VALS 165, 180, 82
+#define LAST_MOVE_COLOR_VALS 135, 131, 209
+
+#define UI_BACKGROUND_COLOR_VALS 120, 133, 133
+
+/* DIMENSIONS, CELLS AND PIECES */
 
 #define SCREEN_WIDTH 1920
 #define SCREEN_HEIGHT 1080
