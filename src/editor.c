@@ -109,9 +109,11 @@ void game_set_mode_editor(void* event_data)
     
     assetman_set_asset(true, "EditorSaveButton", TEXTURE_ASSET_TYPE, save_label);
 
+    SDL_Texture* name_field_label = sui_texture_from_text(game.renderer, assetman_get_asset("$SelectorFont"), "NOME", (SDL_Color){ ATTRACTIVE_COLOR_VALS, 255 });
     SDL_Texture* board_field_label = sui_texture_from_text(game.renderer, assetman_get_asset("$SelectorFont"), "TABULEIRO", (SDL_Color){ ATTRACTIVE_COLOR_VALS, 255 });
     SDL_Texture* double_corner_field_label = sui_texture_from_text(game.renderer, assetman_get_asset("$SelectorFont"), "CANTO DUPLO", (SDL_Color){ ATTRACTIVE_COLOR_VALS, 255 });
 
+    assetman_set_asset(true, "EditorFieldSchName", TEXTURE_ASSET_TYPE, name_field_label);
     assetman_set_asset(true, "EditorFieldBoard", TEXTURE_ASSET_TYPE, board_field_label);
     assetman_set_asset(true, "EditorFieldDCorner", TEXTURE_ASSET_TYPE, double_corner_field_label);
 
@@ -250,16 +252,19 @@ static void editor_set_main_section(void* event_data)
     board_size_button->button_trigger.as_button_element.event_data = &board_size_button->text.as_texture_element;
     double_corner_side_button->button_trigger.as_button_element.event_data = &double_corner_side_button->text.as_texture_element;
 
-    int widthA, widthB;
+    int widthA, widthB, widthC;
 
-    SDL_QueryTexture(assetman_get_asset("EditorFieldBoard"), NULL, NULL, &widthA, NULL);
-    SDL_QueryTexture(assetman_get_asset("EditorFieldDCorner"), NULL, NULL, &widthB, NULL);
+    SDL_QueryTexture(assetman_get_asset("EditorFieldSchName"), NULL, NULL, &widthA, NULL);
+    SDL_QueryTexture(assetman_get_asset("EditorFieldBoard"), NULL, NULL, &widthB, NULL);
+    SDL_QueryTexture(assetman_get_asset("EditorFieldDCorner"), NULL, NULL, &widthC, NULL);
 
-    sui_texture_element_add_v2(sui_rect_center_x(&button_row1_rects[0], widthA), button_row1_rects[0].y - 75, assetman_get_asset("EditorFieldBoard"));
-    sui_texture_element_add_v2(sui_rect_center_x(&button_row1_rects[1], widthB), button_row1_rects[1].y - 75, assetman_get_asset("EditorFieldDCorner"));
+    sui_texture_element_add_v2(sui_rect_center_x(&button_row1_rects[0], widthB), button_row1_rects[0].y - 75, assetman_get_asset("EditorFieldBoard"));
+    sui_texture_element_add_v2(sui_rect_center_x(&button_row1_rects[1], widthC), button_row1_rects[1].y - 75, assetman_get_asset("EditorFieldDCorner"));
 
     SDL_Rect sch_name_field_rect = sui_rect_centered(&game.screen_scenario_ui_rect, 350, 100);
     sch_name_field_rect.y -= 250;
+
+    sui_texture_element_add_v2(sui_rect_center_x(&sch_name_field_rect, widthA), sch_name_field_rect.y - 75, assetman_get_asset("EditorFieldSchName"));
 
     sui_button_element_add(&sch_name_field_rect, toggle_text_input_field, NULL);
     sui_solid_rect_element_add(&sch_name_field_rect, (SDL_Color){ 255, 255, 255, 255 });
