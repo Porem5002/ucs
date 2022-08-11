@@ -92,6 +92,9 @@
 
 #define AUTO_PLAY_COOLDOWN 0.3F
 
+#define TEXT_INPUT_FIELD_MAX_LENGTH 14
+#define TEXT_INPUT_FIELD_SIZE (TEXT_INPUT_FIELD_MAX_LENGTH+1)
+
 enum
 {
     MODE_MENU,
@@ -162,7 +165,7 @@ typedef struct
     SDL_Window* window;
     SDL_Renderer* renderer;
 
-    string_t text_input_field;
+    char text_input_field [TEXT_INPUT_FIELD_SIZE];
     game_input_t input;
 
     void (*update) ();

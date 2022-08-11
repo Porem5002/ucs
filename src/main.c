@@ -62,7 +62,7 @@ int main(int argc, char** argv)
     game.input.mouseX = 0;
     game.input.mouseY = 0;
     game.is_text_input_field_active = false;
-    game.text_input_field = NULL;
+    game.text_input_field[0] = '\0';
     game.on_text_input_field_changed = NULL;
     
     game_set_mode_menu(NULL);

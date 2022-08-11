@@ -150,7 +150,7 @@ static void save_scenario_as_sch_file(void* event_data)
 
     fprintf(f, "SCENARIO_TYPE : %s\n", scenario_mode_to_str(scenario->scenario_mode));
     
-    if(game.text_input_field != NULL)
+    if(strcmp(game.text_input_field, "") != 0)
         fprintf(f, "NAME:\"%s\"\n", game.text_input_field);
 
     fprintf(f, "ICON:\"%s\"\n", icon_path);
@@ -261,7 +261,7 @@ static void editor_set_main_section(void* event_data)
     sui_texture_element_add_v2(sui_rect_center_x(&button_row1_rects[0], widthB), button_row1_rects[0].y - 75, assetman_get_asset("EditorFieldBoard"));
     sui_texture_element_add_v2(sui_rect_center_x(&button_row1_rects[1], widthC), button_row1_rects[1].y - 75, assetman_get_asset("EditorFieldDCorner"));
 
-    SDL_Rect sch_name_field_rect = sui_rect_centered(&game.screen_scenario_ui_rect, 350, 100);
+    SDL_Rect sch_name_field_rect = sui_rect_centered(&game.screen_scenario_ui_rect, 450, 100);
     sch_name_field_rect.y -= 250;
 
     sui_texture_element_add_v2(sui_rect_center_x(&sch_name_field_rect, widthA), sch_name_field_rect.y - 75, assetman_get_asset("EditorFieldSchName"));

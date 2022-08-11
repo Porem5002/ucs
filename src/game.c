@@ -340,16 +340,20 @@ void game_text_input_field_stop()
 
 void game_text_input_field_receive(string_t received_text)
 {
-    if(game.text_input_field == NULL)
-    {
-        game.text_input_field = string_heap_copy(received_text);
-    }
-    else
-    {
-        string_t prev_text = game.text_input_field;
-        game.text_input_field = string_heap_concat(prev_text, received_text);
-        free(prev_text);
-    }
+    size_t length_to_add = strlen(received_text);
+
+    if(length_to_add == 0) return;
+
+    size_t length_left = TEXT_INPUT_FIELD_MAX_LENGTH - strlen(game.text_input_field);
+    char* anchor = game.text_input_field + strlen(game.text_input_field);
+
+    size_t clamped_length = length_to_add > length_left ? length_left : length_to_add;
+    size_t i;
+    
+    for (i = 0; i < clamped_length; i++)
+        anchor[i] = received_text[i];
+        
+    anchor[i] = '\0';
 
     if(game.on_text_input_field_changed != NULL)
         game.on_text_input_field_changed();
@@ -357,8 +361,6 @@ void game_text_input_field_receive(string_t received_text)
 
 void game_text_input_field_back()
 {
-    if(game.text_input_field == NULL) return;
-
     size_t length = string_length(game.text_input_field);
     
     if(length == 0) return;
@@ -371,6 +373,5 @@ void game_text_input_field_back()
 
 void game_text_input_field_clear()
 {
-    free(game.text_input_field);
-    game.text_input_field = NULL;
+    game.text_input_field[0] = '\0';
 }
