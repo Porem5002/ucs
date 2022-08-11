@@ -155,7 +155,7 @@ scenario_info_t get_scenario_info_from_file(string_t file_path)
 
     if(found_name)
     {
-        TTF_Font* browser_font = assetman_get_asset("$SelectorFont");
+        TTF_Font* browser_font = assetman_get_asset("$Font35pt");
         token_t assigment_symbol_token = lexer_collect_next_token(&lexer); 
         token_t name_file_path_token = lexer_collect_next_token(&lexer);
 

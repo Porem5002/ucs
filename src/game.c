@@ -116,8 +116,8 @@ void game_set_mode_menu(void* event_data)
     
     sui_clear_elements();
 
-    TTF_Font* main_font = assetman_get_asset("$MainFont");
-    TTF_Font* title_font = assetman_get_asset("$TitleFont");
+    TTF_Font* main_font = assetman_get_asset("$Font45pt");
+    TTF_Font* title_font = assetman_get_asset("$Font150pt");
 
     SDL_Color text_color = { MIDDLE_COLOR_VALS, 255};
     SDL_Color button_background_color = { ATTRACTIVE_COLOR_VALS, 255};
@@ -247,7 +247,7 @@ void game_activate_game_over_panel(char* text_message)
 {
     if(game.scenario_game_over_reached) return;
 
-    TTF_Font* main_font = assetman_get_asset("$MainFont");
+    TTF_Font* main_font = assetman_get_asset("$Font45pt");
 
     SDL_Rect panel_rect = sui_rect_centered(&game.screen_rect, 900, 700);
 

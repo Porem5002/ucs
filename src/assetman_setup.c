@@ -8,9 +8,10 @@
 
 void setup_initial_assets(SDL_Renderer* renderer)
 {
-    TTF_Font* main_font = TTF_OpenFont(PATH_FONTS "main_text.ttf", 45);
-    TTF_Font* title_font = TTF_OpenFont(PATH_FONTS "main_text.ttf", 150);
-    TTF_Font* browser_font = TTF_OpenFont(PATH_FONTS "main_text.ttf", 35);
+    TTF_Font* font_150pt = TTF_OpenFont(PATH_FONTS "main_text.ttf", 150);
+    TTF_Font* font_45pt = TTF_OpenFont(PATH_FONTS "main_text.ttf", 45);
+    TTF_Font* font_35pt = TTF_OpenFont(PATH_FONTS "main_text.ttf", 35);
+    TTF_Font* font_26pt = TTF_OpenFont(PATH_FONTS "main_text.ttf", 26);
 
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "2");
 
@@ -22,11 +23,12 @@ void setup_initial_assets(SDL_Renderer* renderer)
     SDL_Texture* incorrect_move_texture = sui_load_texture(PATH_IMAGES "incorrect_move.png", renderer, NULL);
     SDL_Texture* remove_piece_texture = sui_load_texture(PATH_IMAGES "remove_piece.png", renderer, NULL);
     SDL_Texture* default_scenario_icon_texture = sui_load_texture(PATH_IMAGES "default_scenario_icon.png", renderer, NULL);
-    SDL_Texture* default_scenario_name_texture = sui_texture_from_text(renderer, browser_font, "???", (SDL_Color){ ATTRACTIVE_COLOR_VALS , 255});
+    SDL_Texture* default_scenario_name_texture = sui_texture_from_text(renderer, font_35pt, "???", (SDL_Color){ ATTRACTIVE_COLOR_VALS , 255});
 
-    assetman_set_asset(true, "$MainFont", FONT_ASSET_TYPE, main_font);
-    assetman_set_asset(true, "$TitleFont", FONT_ASSET_TYPE, title_font);
-    assetman_set_asset(true, "$SelectorFont", FONT_ASSET_TYPE, browser_font);
+    assetman_set_asset(true, "$Font150pt", FONT_ASSET_TYPE, font_150pt);
+    assetman_set_asset(true, "$Font45pt", FONT_ASSET_TYPE, font_45pt);
+    assetman_set_asset(true, "$Font35pt", FONT_ASSET_TYPE, font_35pt);
+    assetman_set_asset(true, "$Font26pt", FONT_ASSET_TYPE, font_26pt);
     assetman_set_asset(true, "$WhitePeon", TEXTURE_ASSET_TYPE, white_peon_texture);
     assetman_set_asset(true, "$WhiteQueen", TEXTURE_ASSET_TYPE, white_queen_texture);
     assetman_set_asset(true, "$BlackPeon", TEXTURE_ASSET_TYPE, black_peon_texture);
