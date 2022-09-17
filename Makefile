@@ -1,5 +1,5 @@
 CC=gcc
-CC_FLAGS=-O2 -Wall -mwindows
+CC_FLAGS=-O2 -Wall -Wextra -Wconversion -Wno-pedantic-ms-format -mwindows
 SDL_FLAGS=-lmingw32 -Llib -lSDL2main -lSDL2 SDL2_image.dll SDL2_ttf.dll
 
 SRCDIR=src
@@ -9,7 +9,7 @@ RC=resource
 ucs: $(SRC) resources.o
 	$(CC) $(CC_FLAGS) $^ -o $@ $(SDL_FLAGS)
 
-debug: CC_FLAGS=-g -Wall -DDTS_DEBUG_CHECKS
+debug: CC_FLAGS=-g -Wall -Wextra -Wconversion -Wno-pedantic-ms-format -DDTS_DEBUG_CHECKS
 debug: ucs
 
 resources.o: resources.rc
