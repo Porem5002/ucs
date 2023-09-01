@@ -1,6 +1,11 @@
 #include <stdio.h>
 #include <string.h>
+
+#ifdef _WIN32
 #include <io.h>
+#elif defined(__linux__)
+#include <dirent.h>
+#endif
 
 #include "include/assetman_setup.h"
 #include "include/scenario_loader.h"
@@ -80,6 +85,8 @@ void load_scenario_from_file(scenario_t* destination, string_t file_path)
     array_free(&tokens);
 }
 
+#ifdef _WIN32
+
 array(string_t) get_scenario_paths_from_dir(string_t dir_path)
 {
     dynarray(string_t) file_paths_list = dynarray_new(string_t, 0);
@@ -99,7 +106,7 @@ array(string_t) get_scenario_paths_from_dir(string_t dir_path)
             current_file_path = string_heap_concat(dir_path, current_file_data.name);
             dynarray_add(&file_paths_list, string_t, &current_file_path);
         }
-            
+
         _findclose(hFile);
     }
 
@@ -107,6 +114,33 @@ array(string_t) get_scenario_paths_from_dir(string_t dir_path)
 
     return dynarray_to_array(&file_paths_list, string_t);
 }
+
+#elif defined(__linux__)
+
+array(string_t) get_scenario_paths_from_dir(string_t dir_path)
+{
+    dynarray(string_t) file_paths_list = dynarray_new(string_t, 0);
+    DIR* dir = opendir(dir_path);
+    struct dirent* direntp;
+
+    while((direntp = readdir(dir)) != NULL)
+    {
+        size_t len_fname = strlen(direntp->d_name);
+	size_t len_ext = strlen(SCENARIO_FILE_EXTENSION);
+
+        if(len_fname < len_ext || strcmp(&direntp->d_name[len_fname - len_ext], SCENARIO_FILE_EXTENSION) != 0)
+	    continue;
+
+        string_t current_file_path = string_heap_concat(dir_path, direntp->d_name);
+        dynarray_add(&file_paths_list, string_t, &current_file_path);
+    }
+
+    closedir(dir);
+
+    return dynarray_to_array(&file_paths_list, string_t);
+}
+
+#endif
 
 scenario_info_t get_scenario_info_from_file(string_t file_path)
 {
