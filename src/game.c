@@ -268,7 +268,7 @@ void game_activate_game_over_panel(char* text_message)
     SDL_Rect button_rect = sui_rect_centered(&game.screen_rect, 300, 100);
     button_rect.y += 250;
     
-    SDL_Texture* menu_button_texture = sui_texture_from_text(game.renderer, main_font, "MENU", (SDL_Color){ MIDDLE_COLOR_VALS, 255 });
+    SDL_Texture* menu_button_texture = sui_texture_from_text(game.renderer, main_font, UI_MENU_BUTTON_TEXT, (SDL_Color){ MIDDLE_COLOR_VALS, 255 });
 
     sui_simple_button_with_texture_add(&button_rect, menu_button_texture, game_set_mode_menu, NULL, (SDL_Color){ ATTRACTIVE_COLOR_VALS, 255 });
 

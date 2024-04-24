@@ -6,6 +6,7 @@
 #include "include/scenario_loader.h"
 #include "include/rendering.h"
 #include "include/strplus.h"
+#include "include/ui_labels.h"
 
 /* 20 digits + ".sch" + '\0' */
 #define SCH_FILE_NAME_CHAR_COUNT 25
@@ -71,25 +72,25 @@ void game_set_mode_editor(void* event_data)
     game.screen_scenario_board_rect = (SDL_Rect){ 0, 0, BOARD_SECTION_WIDTH, BOARD_SECTION_HEIGHT };
     game.screen_scenario_ui_rect = (SDL_Rect){ BOARD_SECTION_WIDTH, 0, SCREEN_WIDTH - BOARD_SECTION_WIDTH, BOARD_SECTION_HEIGHT };
 
-    SDL_Texture* main_section_label = sui_texture_from_text(game.renderer, assetman_get_asset("$Font45pt"), "PRINCIPAL", (SDL_Color){ ATTRACTIVE_COLOR_VALS, 255 });
-    SDL_Texture* rules_section_label = sui_texture_from_text(game.renderer, assetman_get_asset("$Font45pt"), "REGRAS", (SDL_Color){ ATTRACTIVE_COLOR_VALS, 255 });
-    SDL_Texture* pieces_section_label = sui_texture_from_utf8_text(game.renderer, assetman_get_asset("$Font45pt"), "PEÇAS", (SDL_Color){ ATTRACTIVE_COLOR_VALS, 255 });
+    SDL_Texture* main_section_label = sui_texture_from_text(game.renderer, assetman_get_asset("$Font45pt"), UI_EDITOR_LABEL_MAIN, (SDL_Color){ ATTRACTIVE_COLOR_VALS, 255 });
+    SDL_Texture* rules_section_label = sui_texture_from_text(game.renderer, assetman_get_asset("$Font45pt"), UI_EDITOR_LABEL_RULES, (SDL_Color){ ATTRACTIVE_COLOR_VALS, 255 });
+    SDL_Texture* pieces_section_label = sui_texture_from_utf8_text(game.renderer, assetman_get_asset("$Font45pt"), UI_EDITOR_LABEL_PIECES, (SDL_Color){ ATTRACTIVE_COLOR_VALS, 255 });
 
-    SDL_Texture* selected_main_section_label = sui_texture_from_text(game.renderer, assetman_get_asset("$Font45pt"), "PRINCIPAL", (SDL_Color){ MIDDLE_COLOR_VALS, 255 });
-    SDL_Texture* selected_rules_section_label = sui_texture_from_text(game.renderer, assetman_get_asset("$Font45pt"), "REGRAS", (SDL_Color){ MIDDLE_COLOR_VALS, 255 });
-    SDL_Texture* selected_pieces_section_label = sui_texture_from_utf8_text(game.renderer, assetman_get_asset("$Font45pt"), "PEÇAS", (SDL_Color){ MIDDLE_COLOR_VALS, 255 });
+    SDL_Texture* selected_main_section_label = sui_texture_from_text(game.renderer, assetman_get_asset("$Font45pt"), UI_EDITOR_LABEL_MAIN, (SDL_Color){ MIDDLE_COLOR_VALS, 255 });
+    SDL_Texture* selected_rules_section_label = sui_texture_from_text(game.renderer, assetman_get_asset("$Font45pt"), UI_EDITOR_LABEL_RULES, (SDL_Color){ MIDDLE_COLOR_VALS, 255 });
+    SDL_Texture* selected_pieces_section_label = sui_texture_from_utf8_text(game.renderer, assetman_get_asset("$Font45pt"), UI_EDITOR_LABEL_PIECES, (SDL_Color){ MIDDLE_COLOR_VALS, 255 });
 
-    SDL_Texture* true_value_label = sui_texture_from_text(game.renderer, assetman_get_asset("$Font45pt"), "SIM", (SDL_Color){ MIDDLE_COLOR_VALS, 255 });
-    SDL_Texture* false_value_label = sui_texture_from_utf8_text(game.renderer, assetman_get_asset("$Font45pt"), "NÃO", (SDL_Color){ MIDDLE_COLOR_VALS, 255 });
+    SDL_Texture* true_value_label = sui_texture_from_text(game.renderer, assetman_get_asset("$Font45pt"), UI_EDITOR_LABEL_YES, (SDL_Color){ MIDDLE_COLOR_VALS, 255 });
+    SDL_Texture* false_value_label = sui_texture_from_utf8_text(game.renderer, assetman_get_asset("$Font45pt"), UI_EDITOR_LABEL_NO, (SDL_Color){ MIDDLE_COLOR_VALS, 255 });
 
-    SDL_Texture* board_size_label_8x8 = sui_texture_from_text(game.renderer, assetman_get_asset("$Font45pt"), "8x8", (SDL_Color){0,0,0,255});
-    SDL_Texture* board_size_label_10x10 = sui_texture_from_text(game.renderer, assetman_get_asset("$Font45pt"), "10x10", (SDL_Color){0,0,0,255});
-    SDL_Texture* board_size_label_12x12 = sui_texture_from_text(game.renderer, assetman_get_asset("$Font45pt"), "12x12", (SDL_Color){0,0,0,255});
+    SDL_Texture* board_size_label_8x8 = sui_texture_from_text(game.renderer, assetman_get_asset("$Font45pt"), UI_EDITOR_LABEL_8X8, (SDL_Color){0,0,0,255});
+    SDL_Texture* board_size_label_10x10 = sui_texture_from_text(game.renderer, assetman_get_asset("$Font45pt"), UI_EDITOR_LABEL_10X10, (SDL_Color){0,0,0,255});
+    SDL_Texture* board_size_label_12x12 = sui_texture_from_text(game.renderer, assetman_get_asset("$Font45pt"), UI_EDITOR_LABEL_12X12, (SDL_Color){0,0,0,255});
 
-    SDL_Texture* double_corner_label_right = sui_texture_from_text(game.renderer, assetman_get_asset("$Font45pt"), "DIREITO", (SDL_Color){0,0,0,255});
-    SDL_Texture* double_corner_label_left = sui_texture_from_text(game.renderer, assetman_get_asset("$Font45pt"), "ESQUERDO", (SDL_Color){0,0,0,255});
+    SDL_Texture* double_corner_label_right = sui_texture_from_text(game.renderer, assetman_get_asset("$Font45pt"), UI_EDITOR_LABEL_RIGHT, (SDL_Color){0,0,0,255});
+    SDL_Texture* double_corner_label_left = sui_texture_from_text(game.renderer, assetman_get_asset("$Font45pt"), UI_EDITOR_LABEL_LEFT, (SDL_Color){0,0,0,255});
 
-    SDL_Texture* save_label = sui_texture_from_text(game.renderer, assetman_get_asset("$Font45pt"), "SALVAR", (SDL_Color){0,0,0,255});
+    SDL_Texture* save_label = sui_texture_from_text(game.renderer, assetman_get_asset("$Font45pt"), UI_EDITOR_LABEL_SAVE, (SDL_Color){0,0,0,255});
 
     assetman_set_asset(true, "EditorMain", TEXTURE_ASSET_TYPE, main_section_label);
     assetman_set_asset(true, "EditorRules", TEXTURE_ASSET_TYPE, rules_section_label);
@@ -110,19 +111,19 @@ void game_set_mode_editor(void* event_data)
     
     assetman_set_asset(true, "EditorSaveButton", TEXTURE_ASSET_TYPE, save_label);
 
-    SDL_Texture* name_field_label = sui_texture_from_text(game.renderer, assetman_get_asset("$Font35pt"), "NOME", (SDL_Color){ ATTRACTIVE_COLOR_VALS, 255 });
-    SDL_Texture* board_field_label = sui_texture_from_text(game.renderer, assetman_get_asset("$Font35pt"), "TABULEIRO", (SDL_Color){ ATTRACTIVE_COLOR_VALS, 255 });
-    SDL_Texture* double_corner_field_label = sui_texture_from_text(game.renderer, assetman_get_asset("$Font35pt"), "CANTO DUPLO", (SDL_Color){ ATTRACTIVE_COLOR_VALS, 255 });
+    SDL_Texture* name_field_label = sui_texture_from_text(game.renderer, assetman_get_asset("$Font35pt"), UI_EDITOR_LABEL_NAME, (SDL_Color){ ATTRACTIVE_COLOR_VALS, 255 });
+    SDL_Texture* board_field_label = sui_texture_from_text(game.renderer, assetman_get_asset("$Font35pt"), UI_EDITOR_LABEL_BOARD, (SDL_Color){ ATTRACTIVE_COLOR_VALS, 255 });
+    SDL_Texture* double_corner_field_label = sui_texture_from_text(game.renderer, assetman_get_asset("$Font35pt"), UI_EDITOR_LABEL_D_CORNER, (SDL_Color){ ATTRACTIVE_COLOR_VALS, 255 });
 
     assetman_set_asset(true, "EditorFieldSchName", TEXTURE_ASSET_TYPE, name_field_label);
     assetman_set_asset(true, "EditorFieldBoard", TEXTURE_ASSET_TYPE, board_field_label);
     assetman_set_asset(true, "EditorFieldDCorner", TEXTURE_ASSET_TYPE, double_corner_field_label);
 
-    SDL_Texture* initial_player_field_label = sui_texture_from_text(game.renderer, assetman_get_asset("$Font35pt"), "JOGADOR INICIAL", (SDL_Color){ ATTRACTIVE_COLOR_VALS, 255 });
-    SDL_Texture* law_of_quantity_field_label = sui_texture_from_text(game.renderer, assetman_get_asset("$Font35pt"), "LEI DA QUANTIDADE", (SDL_Color){ ATTRACTIVE_COLOR_VALS, 255 });
-    SDL_Texture* law_of_quality_field_label = sui_texture_from_text(game.renderer, assetman_get_asset("$Font35pt"), "LEI DA QUALIDADE", (SDL_Color){ ATTRACTIVE_COLOR_VALS, 255 });
-    SDL_Texture* peons_capture_backwards_field_label = sui_texture_from_utf8_text(game.renderer, assetman_get_asset("$Font26pt"), "PEÃO CAPTURA PARA TRÁS", (SDL_Color){ ATTRACTIVE_COLOR_VALS, 255 });
-    SDL_Texture* flying_kings_field_label = sui_texture_from_text(game.renderer, assetman_get_asset("$Font35pt"), "DAMAS VOADORAS", (SDL_Color){ ATTRACTIVE_COLOR_VALS, 255 });
+    SDL_Texture* initial_player_field_label = sui_texture_from_text(game.renderer, assetman_get_asset("$Font35pt"), UI_EDITOR_LABEL_START_PLAYER, (SDL_Color){ ATTRACTIVE_COLOR_VALS, 255 });
+    SDL_Texture* law_of_quantity_field_label = sui_texture_from_text(game.renderer, assetman_get_asset("$Font35pt"), UI_EDITOR_LABEL_LAW_QUANTITY, (SDL_Color){ ATTRACTIVE_COLOR_VALS, 255 });
+    SDL_Texture* law_of_quality_field_label = sui_texture_from_text(game.renderer, assetman_get_asset("$Font35pt"), UI_EDITOR_LABEL_LAW_QUALITY, (SDL_Color){ ATTRACTIVE_COLOR_VALS, 255 });
+    SDL_Texture* peons_capture_backwards_field_label = sui_texture_from_utf8_text(game.renderer, assetman_get_asset("$Font26pt"), UI_EDITOR_LABEL_PEON_BACK_CAPTURE, (SDL_Color){ ATTRACTIVE_COLOR_VALS, 255 });
+    SDL_Texture* flying_kings_field_label = sui_texture_from_text(game.renderer, assetman_get_asset("$Font35pt"), UI_EDITOR_LABEL_FLYING_KINGS, (SDL_Color){ ATTRACTIVE_COLOR_VALS, 255 });
 
     assetman_set_asset(true, "EditorFieldInitPlayer", TEXTURE_ASSET_TYPE, initial_player_field_label);
     assetman_set_asset(true, "EditorFieldFlyingKings", TEXTURE_ASSET_TYPE, flying_kings_field_label);

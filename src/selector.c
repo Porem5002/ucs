@@ -38,11 +38,11 @@ void game_set_mode_selector(void* event_data)
     SDL_Texture* next_page_button_texture = sui_load_texture(PATH_IMAGES "next_page.png", game.renderer, NULL);
     SDL_Texture* prev_page_button_texture = sui_load_texture(PATH_IMAGES "prev_page.png", game.renderer, NULL);
 
-    SDL_Texture* selected_standard_section_texture = sui_texture_from_text(game.renderer, assetman_get_asset("$Font45pt"), "STANDARD", (SDL_Color){ MIDDLE_COLOR_VALS, 255 });
-    SDL_Texture* selected_editor_section_texture = sui_texture_from_text(game.renderer, assetman_get_asset("$Font45pt"), "EDITOR", (SDL_Color){ MIDDLE_COLOR_VALS, 255 });
+    SDL_Texture* selected_standard_section_texture = sui_texture_from_text(game.renderer, assetman_get_asset("$Font45pt"), UI_SELECTOR_STANDARD_LABEL, (SDL_Color){ MIDDLE_COLOR_VALS, 255 });
+    SDL_Texture* selected_editor_section_texture = sui_texture_from_text(game.renderer, assetman_get_asset("$Font45pt"), UI_SELECTOR_EDITOR_LABEL, (SDL_Color){ MIDDLE_COLOR_VALS, 255 });
 
-    SDL_Texture* standard_section_texture = sui_texture_from_text(game.renderer, assetman_get_asset("$Font45pt"), "STANDARD", (SDL_Color){ ATTRACTIVE_COLOR_VALS, 255 });
-    SDL_Texture* editor_section_texture = sui_texture_from_text(game.renderer, assetman_get_asset("$Font45pt"), "EDITOR", (SDL_Color){ ATTRACTIVE_COLOR_VALS, 255 });
+    SDL_Texture* standard_section_texture = sui_texture_from_text(game.renderer, assetman_get_asset("$Font45pt"), UI_SELECTOR_STANDARD_LABEL, (SDL_Color){ ATTRACTIVE_COLOR_VALS, 255 });
+    SDL_Texture* editor_section_texture = sui_texture_from_text(game.renderer, assetman_get_asset("$Font45pt"), UI_SELECTOR_EDITOR_LABEL, (SDL_Color){ ATTRACTIVE_COLOR_VALS, 255 });
 
     assetman_set_asset(true, "SelectorBackButton", TEXTURE_ASSET_TYPE, back_button_text_texture);
     assetman_set_asset(true, "SelectorNextPage", TEXTURE_ASSET_TYPE, next_page_button_texture);

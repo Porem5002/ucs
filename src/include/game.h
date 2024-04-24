@@ -12,6 +12,7 @@
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_image.h"
 #include "SDL2/SDL_ttf.h"
+#include "ui_labels.h"
 
 #define DTS_USE_ARRAY
 #define DTS_USE_DYNARRAY
@@ -19,35 +20,10 @@
 
 #include "dtstructs.h"
 
-/* LOG and UI text */
-
-#define PT_MENUS 1
-
-#define LOG_MESSAGE_CHALLENGE_COMPLETED "Challenge Completed"
-#define LOG_MESSAGE_BLACK_TEAM_WON      "Black Team Won"
-#define LOG_MESSAGE_WHITE_TEAM_WON      "White Team Won"
-
-#if PT_MENUS == 1
-#define UI_MESSAGE_CHALLENGE_COMPLETED  "Desafio Concluido"
-#define UI_MESSAGE_BLACK_TEAM_WON       "Negras Venceram"
-#define UI_MESSAGE_WHITE_TEAM_WON       "Brancas Venceram"
-
-#define UI_START_BUTTON_TEXT "JOGAR"
-#define UI_EDITOR_BUTTON_TEXT "EDITOR"
-#define UI_QUIT_BUTTON_TEXT "SAIR"
-#define UI_BACK_BUTTON_TEXT "VOLTAR"
-
-#else
-#define UI_MESSAGE_CHALLENGE_COMPLETED  LOG_MESSAGE_CHALLENGE_COMPLETED
-#define UI_MESSAGE_BLACK_TEAM_WON       LOG_MESSAGE_BLACK_TEAM_WON
-#define UI_MESSAGE_WHITE_TEAM_WON       LOG_MESSAGE_WHITE_TEAM_WON
-
-#define UI_START_BUTTON_TEXT "START"
-#define UI_EDITOR_BUTTON_TEXT "EDITOR"
-#define UI_QUIT_BUTTON_TEXT "QUIT"
-#define UI_BACK_BUTTON_TEXT "BACK"
-
-#endif
+/* LOG text */
+#define LOG_MESSAGE_CHALLENGE_COMPLETED   UI_MESSAGE_CHALLENGE_COMPLETED
+#define LOG_MESSAGE_BLACK_TEAM_WON        UI_MESSAGE_BLACK_TEAM_WON
+#define LOG_MESSAGE_WHITE_TEAM_WON        UI_MESSAGE_WHITE_TEAM_WON
 
 /* RGB COLORS */
 
