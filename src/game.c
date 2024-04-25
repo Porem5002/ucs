@@ -318,7 +318,7 @@ void scenario_set_default(scenario_t* scenario)
     scenario->board_side_size = 8;
     scenario->flying_kings = true;
     scenario->peons_capture_backwards = false;
-    scenario->is_white_peon_forward_top_to_bottom = true;
+    scenario->is_white_peon_forward_top_to_bottom = false;
     scenario->applies_law_of_quantity = true;
     scenario->applies_law_of_quality = false;
     scenario->double_corner_on_right = true;
